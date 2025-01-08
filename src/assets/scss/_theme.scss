@@ -1,0 +1,10 @@
+@use './variables';
+
+:root {
+  --primary-color: #fbfaf3;
+  --secondary-color: #e6bf18;
+  --white: white;
+  --black: $black;
+  --dark: $dark;
+  --box-shadow: $box-shadow;
+}
