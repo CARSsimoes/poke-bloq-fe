@@ -3,8 +3,7 @@ import { defineStore } from 'pinia'
 import pokemonsService from '@/services/pokemons/pokemonsService'
 import type { IPokemon, IPokemonDetail } from '@/shared/types/pokemon'
 import type { PokemonDetailsData } from '@/shared/types/api'
-
-const LIMIT_NUMBER_OF_POKEMONS = 20
+import { LIMIT_NUMBER_OF_POKEMONS } from '@/shared/constants/variables'
 
 interface State {
   pokemons: IPokemonDetail[]
@@ -32,6 +31,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       specialDefense: details.specialDefense,
       types: details.types,
       image: details.sprites.front_default,
+      caught: details.caught || false,
     }
   }
 

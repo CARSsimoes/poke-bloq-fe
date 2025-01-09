@@ -8,6 +8,14 @@ export interface IPokemonSprites {
   back_default: string
 }
 
+export interface IPokemonTypes {
+  slot: number
+  type: {
+    name: string
+    url: string
+  }
+}
+
 export interface IPokemonStats {
   hp: number
   speed: number
@@ -22,17 +30,10 @@ export interface BasePokemonDetails extends IPokemonStats {
   name: string
   height: number
   weight: number
-  types: string[]
+  types: IPokemonTypes[]
+  caught: boolean
 }
 
 export interface IPokemonDetail extends BasePokemonDetails {
   image: string
-}
-
-export interface IPokemonTypes {
-  slot: number
-  type: {
-    name: string
-    url: string
-  }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PokemonsList from '@/components/pokemons/PokemonsList/PokemonsList.vue'
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 import { onMounted } from 'vue'
 
@@ -11,14 +12,15 @@ onMounted(() => {
 
 <template>
   <div>
-    <h1>Pokémon List</h1>
-    <ul>
-      <li v-for="pokemon in pokemonsStore.state.pokemons" :key="pokemon.id">
-        <p>{{ pokemon.name }}</p>
-        <img :src="pokemon.image" :alt="pokemon.name" />
-      </li>
-    </ul>
+    <h1 class="pokemons-view__title">Pokémons List</h1>
+    <PokemonsList />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+@use '@/assets/scss/variables' as vars;
+
+.pokemons-view__title {
+  color: vars.$white;
+}
+</style>
