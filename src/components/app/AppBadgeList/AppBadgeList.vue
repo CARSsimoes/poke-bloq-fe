@@ -20,11 +20,12 @@ defineProps<Props>()
   display: flex;
   flex-wrap: wrap;
   align-content: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem;
   border-radius: 1rem;
-  min-width: 2rem;
   background-color: white;
   height: 1.5rem;
+  width: fit-content;
 }
 </style>

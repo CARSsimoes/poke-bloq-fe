@@ -1,4 +1,9 @@
-import type { IPokemon, IPokemonSprites, BasePokemonDetails } from '@/shared/types/pokemon'
+import type {
+  BasePokemonDetails,
+  IPokemonStat,
+  IPokemon,
+  IPokemonSprites,
+} from '@/shared/types/pokemon'
 
 export interface PokemonData {
   count: number
@@ -13,8 +18,9 @@ export interface PokemonsListApiResponse {
   statusText: string
 }
 
-export interface PokemonDetailsData extends BasePokemonDetails {
+export interface PokemonDetailsData extends Omit<BasePokemonDetails, 'caught'> {
   sprites: IPokemonSprites
+  stats: IPokemonStat[]
 }
 
 export interface PokemonDetailsApiResponse {

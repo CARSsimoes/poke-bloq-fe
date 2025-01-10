@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import AppToggle from '@/components/app/AppToggle/AppToggle.vue'
-import PokemonsList from '@/components/pokemons/PokemonsList/PokemonsList.vue'
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import LayoutViewsSwapper from '../LayoutViewsSwapper/LayoutViewsSwapper.vue'
+import LayoutType from '@/shared/layouts/layouts'
 
 const pokemonsStore = usePokemonsStore()
 
-const isCardView = ref<boolean>(true)
+const isCardView = ref<boolean>(false)
 
 const toggleViewMode = () => {
   isCardView.value = !isCardView.value
 }
+
+const activeLayout = computed(() => (isCardView.value ? LayoutType.CARD : LayoutType.TABLE))
 
 onMounted(() => {
   pokemonsStore.loadPokemons()
@@ -21,21 +24,16 @@ onMounted(() => {
   <div>
     <header>
       <div>
-        <h1 class="pokemons-view__title">Pokémons List</h1>
+        <h1 class="pokemons-view__title">Pokedéx</h1>
       </div>
       <AppToggle
         class="pokemons-view__toggle-button"
-        :option1="'Table'"
-        :option2="'Card'"
+        :option1="LayoutType.CARD"
+        :option2="LayoutType.TABLE"
         :toggleMethod="toggleViewMode"
       />
     </header>
-    <template v-if="isCardView">
-      <PokemonsList />
-    </template>
-    <template v-else>
-      <p></p>
-    </template>
+    <LayoutViewsSwapper :layoutType="activeLayout" />
   </div>
 </template>
 
@@ -46,6 +44,7 @@ header {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  margin-bottom: 2rem;
   @media (min-width: 720px) {
     flex-direction: row;
   }
@@ -53,9 +52,10 @@ header {
 
 .pokemons-view__title {
   color: vars.$white;
+  font-size: 2rem;
 }
 
 .pokemons-view__toggle-button {
-  width: 15%;
+  width: 8rem;
 }
 </style>

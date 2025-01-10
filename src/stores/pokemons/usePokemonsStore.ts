@@ -23,15 +23,15 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       id: details.id,
       height: details.height,
       weight: details.weight,
-      hp: details.hp,
-      speed: details.speed,
-      attack: details.attack,
-      defense: details.defense,
-      specialAttack: details.specialAttack,
-      specialDefense: details.specialDefense,
+      hp: details.stats[0].base_stat,
+      attack: details.stats[1].base_stat,
+      defense: details.stats[2].base_stat,
+      specialAttack: details.stats[3].base_stat,
+      specialDefense: details.stats[4].base_stat,
+      speed: details.stats[5].base_stat,
       types: details.types,
       image: details.sprites.front_default,
-      caught: details.caught || false,
+      caught: false,
     }
   }
 

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PokemonsList from '../views/PokemonsView/PokemonsView.vue'
+import PokedexView from '../views/PokedexView/PokedexView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: PokemonsList,
+      component: PokedexView,
     },
     // {
     //   path: '/about',

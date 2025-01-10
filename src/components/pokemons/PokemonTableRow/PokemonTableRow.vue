@@ -3,7 +3,7 @@ import Pokemon from '@/shared/classes/pokemon/pokemon'
 import type { IPokemonDetail } from '@/shared/types/pokemon'
 import { computed, type ComputedRef } from 'vue'
 import AppBadgeList from '@/components/app/AppBadgeList/AppBadgeList.vue'
-import PokemonId from '@/components/pokemons/PokemonId/PokemonId.vue'
+import PokemonId from '../PokemonId/PokemonId.vue'
 
 interface Props {
   pokemonDetail: IPokemonDetail
@@ -14,33 +14,15 @@ const pokemonDetailInstance: ComputedRef<Pokemon> = computed(() => new Pokemon(p
 </script>
 
 <template>
-  <div
-    class="pokemon-card"
-    :class="{ 'pokemon-card--caught': pokemonDetailInstance.caught }"
-    :style="{
-      backgroundColor: `var(--${pokemonDetailInstance.types[0].type.name.toLowerCase()})`,
-    }"
-  >
+  <td>
     <PokemonId :name="pokemonDetailInstance.name" :image="pokemonDetailInstance.image" />
+  </td>
+  <td>{{ pokemonDetailInstance.height }}</td>
+  <td>{{ pokemonDetailInstance.weight }}</td>
+  <td>{{ pokemonDetailInstance.hp }}</td>
+  <td>
     <AppBadgeList :types="pokemonDetailInstance.getTypeList()" />
-  </div>
+  </td>
+  <td>{{ pokemonDetailInstance.attack }}</td>
+  <td>{{ pokemonDetailInstance.defense }}</td>
 </template>
-
-<style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
-.pokemon-card {
-  color: vars.$white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 1rem;
-  padding: 0.2rem;
-  opacity: 0.5;
-}
-
-.pokemon-card--caught {
-  opacity: 1;
-  color: vars.$black;
-}
-</style>

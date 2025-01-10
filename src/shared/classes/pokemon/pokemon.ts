@@ -42,10 +42,6 @@ class Pokemon {
   getTypeList(): IPokemonTypes[] {
     return this.types
   }
-
-  isCaught(): string {
-    return Boolean(this.caught) ? '' : '#7f8c8d'
-  }
 }
 
 export default Pokemon

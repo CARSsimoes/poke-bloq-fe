@@ -16,7 +16,14 @@ export interface IPokemonTypes {
   }
 }
 
-export interface IPokemonStats {
+export interface IPokemonStat {
+  base_stat: number
+  stat: {
+    name: string
+  }
+}
+
+export interface BasePokemonStats {
   hp: number
   speed: number
   attack: number
@@ -25,7 +32,7 @@ export interface IPokemonStats {
   specialDefense: number
 }
 
-export interface BasePokemonDetails extends IPokemonStats {
+export interface BasePokemonDetails {
   id: number
   name: string
   height: number
@@ -34,6 +41,6 @@ export interface BasePokemonDetails extends IPokemonStats {
   caught: boolean
 }
 
-export interface IPokemonDetail extends BasePokemonDetails {
+export interface IPokemonDetail extends BasePokemonDetails, BasePokemonStats {
   image: string
 }

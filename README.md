@@ -12,6 +12,9 @@ npm install
 
 ```sh
 npm run dev
+
+For mobile testing purposes use the Network: url provided
+
 ```
 
 ### Type-Check, Compile and Minify for Production

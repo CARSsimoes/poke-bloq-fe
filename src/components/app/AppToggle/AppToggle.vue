@@ -1,3 +1,17 @@
+<script setup lang="ts">
+interface Props {
+  option1: string
+  option2: string
+  toggleMethod: () => void
+}
+
+const props = defineProps<Props>()
+
+const handleToggle = () => {
+  props.toggleMethod()
+}
+</script>
+
 <template>
   <label class="app-toggle-container">
     <input type="checkbox" @click="handleToggle" />
@@ -9,39 +23,13 @@
   </label>
 </template>
 
-<script setup lang="ts">
-import { defineProps } from 'vue'
-
-const props = defineProps({
-  option1: {
-    type: String,
-    default: 'On',
-  },
-  option2: {
-    type: String,
-    default: 'Off',
-  },
-  initialViewMode: {
-    type: Boolean,
-    default: true,
-  },
-  toggleMethod: {
-    type: Function,
-    required: true,
-  },
-})
-
-const handleToggle = () => {
-  props.toggleMethod()
-}
-</script>
-
 <style scoped lang="scss">
 @use '@/assets/scss/variables' as vars;
 
 .app-toggle-container {
   position: relative;
   width: 100%;
+  min-width: 8rem;
   height: 2.5rem;
   margin-top: 0.5rem;
   border: 0.0625rem solid vars.$dark;
@@ -64,7 +52,7 @@ const handleToggle = () => {
 }
 
 .app-toggle-container input[type='checkbox']:checked + .app-toggle_back {
-  background: vars.$secondary-color;
+  background: vars.$primary-color;
 }
 
 .app-toggle-container input[type='checkbox'] + .app-toggle_back .app-toggle__empty {
