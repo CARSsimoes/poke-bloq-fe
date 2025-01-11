@@ -1,28 +1,33 @@
 <script setup lang="ts">
-import Pokemon from '@/shared/classes/pokemon/pokemon'
 import type { IPokemonDetail } from '@/shared/types/pokemon'
-import { computed, type ComputedRef } from 'vue'
 import AppBadgeList from '@/components/app/AppBadgeList/AppBadgeList.vue'
 import PokemonId from '@/components/pokemons/PokemonId/PokemonId.vue'
+import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 
 interface Props {
   pokemonDetail: IPokemonDetail
 }
 
-const props = defineProps<Props>()
-const pokemonDetailInstance: ComputedRef<Pokemon> = computed(() => new Pokemon(props.pokemonDetail))
+defineProps<Props>()
+
+const { getTypeListById } = usePokemonsStore()
 </script>
 
 <template>
   <div
     class="pokemon-card"
-    :class="{ 'pokemon-card--caught': pokemonDetailInstance.caught }"
+    :class="{ 'pokemon-card--caught': pokemonDetail.caught }"
     :style="{
-      backgroundColor: `var(--${pokemonDetailInstance.types[0].type.name.toLowerCase()})`,
+      backgroundColor: `var(--${pokemonDetail.types[0].type.name.toLowerCase()})`,
     }"
   >
-    <PokemonId :name="pokemonDetailInstance.name" :image="pokemonDetailInstance.image" />
-    <AppBadgeList :types="pokemonDetailInstance.getTypeList()" />
+    <PokemonId
+      :name="pokemonDetail.name"
+      :image="pokemonDetail.image"
+      :caught="pokemonDetail.caught"
+      :id="pokemonDetail.id"
+    />
+    <AppBadgeList :types="getTypeListById(pokemonDetail.id)" />
   </div>
 </template>
 

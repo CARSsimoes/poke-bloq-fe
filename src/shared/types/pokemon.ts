@@ -43,4 +43,5 @@ export interface BasePokemonDetails {
 
 export interface IPokemonDetail extends BasePokemonDetails, BasePokemonStats {
   image: string
+  timestamp: string
 }

@@ -1,9 +1,11 @@
-import { reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
 import pokemonsService from '@/services/pokemons/pokemonsService'
-import type { IPokemon, IPokemonDetail } from '@/shared/types/pokemon'
+import type { IPokemon, IPokemonDetail, IPokemonTypes } from '@/shared/types/pokemon'
 import type { PokemonDetailsData } from '@/shared/types/api'
 import { LIMIT_NUMBER_OF_POKEMONS } from '@/shared/constants/variables'
+import { formatDateToDMY } from '@/shared/helpers/formatDate'
+import LayoutType from '@/shared/layouts/layouts'
 
 interface State {
   pokemons: IPokemonDetail[]
@@ -16,6 +18,14 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     isLoading: false,
     error: null,
   })
+
+  const isCardView = ref<boolean>(false)
+
+  const toggleViewMode = () => {
+    isCardView.value = !isCardView.value
+  }
+
+  const activeLayout = computed(() => (isCardView.value ? LayoutType.CARD : LayoutType.TABLE))
 
   const mapPokemonDetails = (details: PokemonDetailsData): IPokemonDetail => {
     return {
@@ -32,6 +42,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       types: details.types,
       image: details.sprites.front_default,
       caught: false,
+      timestamp: '',
     }
   }
 
@@ -42,10 +53,12 @@ export const usePokemonsStore = defineStore('pokemons', () => {
 
   const loadPokemons = async (limit = LIMIT_NUMBER_OF_POKEMONS, offset = 0): Promise<void> => {
     try {
-      state.isLoading = true
-      const { data } = await pokemonsService.getPokemons(limit, offset)
-      const pokes = await Promise.all(data.results.map(fetchPokemonDetails))
-      state.pokemons = pokes
+      if (state.pokemons.length === 0) {
+        state.isLoading = true
+        const { data } = await pokemonsService.getPokemons(limit, offset)
+        const pokes = await Promise.all(data.results.map(fetchPokemonDetails))
+        state.pokemons = pokes
+      }
     } catch (e) {
       // use monitoring tools like Posthog or Sentry
       console.log('error', e)
@@ -54,8 +67,30 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     }
   }
 
+  const catchPokemonById = (id: number) => {
+    const pokemon = state.pokemons.find((poke) => poke.id === id)
+    if (pokemon) {
+      pokemon.caught = !pokemon.caught
+    }
+    if (pokemon?.timestamp === '') {
+      pokemon.timestamp = formatDateToDMY()
+    }
+  }
+
+  const getTypeListById = (id: number): IPokemonTypes[] => {
+    const pokemon = state.pokemons.find((poke) => poke.id === id)
+    return pokemon?.types || []
+  }
+
+  const pokemonsCaught = () => state.pokemons.filter((pokemon) => pokemon.caught)
+
   return {
     state,
     loadPokemons,
+    catchPokemonById,
+    getTypeListById,
+    pokemonsCaught,
+    activeLayout,
+    toggleViewMode,
   }
 })

@@ -1,26 +1,39 @@
 <script setup lang="ts">
+import PokeballButton from '../PokeballButton/PokeballButton.vue'
+
 interface Props {
   name: string
   image: string
+  caught: boolean
+  id: number
 }
 
 defineProps<Props>()
 </script>
 
 <template>
-  <p class="pokemon-id__title">{{ name }}</p>
+  <div class="pokemon-id">
+    <p class="pokemon-id__title">{{ name }}</p>
+    <PokeballButton :id="id" :caught="caught" />
+  </div>
   <img class="pokemon-id__img" :src="image" :alt="name" />
 </template>
 
 <style scoped lang="scss">
+.pokemon-id {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
 .pokemon-id__title {
   text-transform: capitalize;
 }
 
 .pokemon-id__img {
-  width: 3rem;
+  width: 6rem;
   @media (min-width: 720px) {
-    width: 6rem;
+    width: 8rem;
   }
 }
 </style>

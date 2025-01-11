@@ -7,7 +7,7 @@ const pokemonsStore = usePokemonsStore()
 
 <template>
   <ul class="pokemons-list__container">
-    <template v-for="pokemon in pokemonsStore.state.pokemons" :key="pokemon.name">
+    <template v-for="pokemon in pokemonsStore.state.pokemons" :key="pokemon.id">
       <PokemonCard :pokemonDetail="pokemon" />
     </template>
   </ul>

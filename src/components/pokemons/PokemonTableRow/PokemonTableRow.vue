@@ -1,28 +1,34 @@
 <script setup lang="ts">
-import Pokemon from '@/shared/classes/pokemon/pokemon'
 import type { IPokemonDetail } from '@/shared/types/pokemon'
-import { computed, type ComputedRef } from 'vue'
 import AppBadgeList from '@/components/app/AppBadgeList/AppBadgeList.vue'
 import PokemonId from '../PokemonId/PokemonId.vue'
+import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 
 interface Props {
   pokemonDetail: IPokemonDetail
 }
 
-const props = defineProps<Props>()
-const pokemonDetailInstance: ComputedRef<Pokemon> = computed(() => new Pokemon(props.pokemonDetail))
+defineProps<Props>()
+
+const { getTypeListById } = usePokemonsStore()
 </script>
 
 <template>
   <td>
-    <PokemonId :name="pokemonDetailInstance.name" :image="pokemonDetailInstance.image" />
+    <PokemonId
+      :name="pokemonDetail.name"
+      :image="pokemonDetail.image"
+      :caught="pokemonDetail.caught"
+      :id="pokemonDetail.id"
+    />
   </td>
-  <td>{{ pokemonDetailInstance.height }}</td>
-  <td>{{ pokemonDetailInstance.weight }}</td>
-  <td>{{ pokemonDetailInstance.hp }}</td>
+  <td>{{ pokemonDetail.height }}</td>
+  <td>{{ pokemonDetail.weight }}</td>
   <td>
-    <AppBadgeList :types="pokemonDetailInstance.getTypeList()" />
+    <AppBadgeList :types="getTypeListById(pokemonDetail.id)" />
   </td>
-  <td>{{ pokemonDetailInstance.attack }}</td>
-  <td>{{ pokemonDetailInstance.defense }}</td>
+  <td>{{ pokemonDetail.hp }}</td>
+  <td>{{ pokemonDetail.attack }}</td>
+  <td>{{ pokemonDetail.defense }}</td>
+  <td>{{ pokemonDetail.timestamp }}</td>
 </template>
