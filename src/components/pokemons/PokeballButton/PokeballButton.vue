@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 import uncaughtPokemon from '@/assets/img/uncaught_pokeball.png'
 import caughtPokemon from '@/assets/img/caught_pokeball.png'

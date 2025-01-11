@@ -35,9 +35,11 @@ const { toggleViewMode } = usePokemonsStore()
 nav {
   display: flex;
   gap: 2rem;
-  color: vars.$white;
   font-size: 2rem;
-  text-decoration: none;
+  a {
+    color: vars.$white;
+    text-decoration: none;
+  }
 }
 
 .app__toggle-button {
