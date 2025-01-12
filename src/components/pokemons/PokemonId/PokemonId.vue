@@ -28,6 +28,10 @@ defineProps<Props>()
 }
 .pokemon-id__title {
   text-transform: capitalize;
+  font-size: 0.75rem;
+  @media (min-width: 720px) {
+    font-size: 1rem;
+  }
 }
 
 .pokemon-id__img {

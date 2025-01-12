@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 import PokemonCard from '../PokemonCard/PokemonCard.vue'
+import { usePokemonsByRoute } from '@/composables/usePokemonsByRoute/usePokemonsByRoute'
 
-const pokemonsStore = usePokemonsStore()
+const { pokemons } = usePokemonsByRoute()
+
+const isSelected = true
 </script>
 
 <template>
   <ul class="pokemons-list__container">
-    <template v-for="pokemon in pokemonsStore.state.pokemons" :key="pokemon.id">
-      <PokemonCard :pokemonDetail="pokemon" />
+    <template v-for="pokemon in pokemons" :key="pokemon.id">
+      <PokemonCard :pokemonDetail="pokemon" :is-selected="isSelected" />
     </template>
   </ul>
 </template>
@@ -19,8 +21,8 @@ const pokemonsStore = usePokemonsStore()
 
 .pokemons-list__container {
   padding-inline-start: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 </style>

@@ -11,12 +11,16 @@ interface State {
   pokemons: IPokemonDetail[]
   isLoading: boolean
   error: string | null
+  totalNumberOfPokemons: number
+  pokemonsCaught: Set<number>
 }
 export const usePokemonsStore = defineStore('pokemons', () => {
   const state = reactive<State>({
     pokemons: [],
     isLoading: false,
     error: null,
+    totalNumberOfPokemons: 0,
+    pokemonsCaught: new Set<number>(),
   })
 
   const isCardView = ref<boolean>(false)
@@ -56,6 +60,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       if (state.pokemons.length === 0) {
         state.isLoading = true
         const { data } = await pokemonsService.getPokemons(limit, offset)
+        state.totalNumberOfPokemons = data.count
         const pokes = await Promise.all(data.results.map(fetchPokemonDetails))
         state.pokemons = pokes
       }
@@ -69,11 +74,20 @@ export const usePokemonsStore = defineStore('pokemons', () => {
 
   const catchPokemonById = (id: number) => {
     const pokemon = state.pokemons.find((poke) => poke.id === id)
+
     if (pokemon) {
       pokemon.caught = !pokemon.caught
-    }
-    if (pokemon?.timestamp === '') {
-      pokemon.timestamp = formatDateToDMY()
+
+      if (pokemon.caught) {
+        // Add to the caught set
+        state.pokemonsCaught.add(pokemon.id)
+
+        // Set the timestamp if not already set
+        if (!pokemon.timestamp) pokemon.timestamp = formatDateToDMY()
+      } else {
+        // Remove from the caught set
+        state.pokemonsCaught.delete(pokemon.id)
+      }
     }
   }
 
@@ -82,15 +96,17 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     return pokemon?.types || []
   }
 
-  const pokemonsCaught = () => state.pokemons.filter((pokemon) => pokemon.caught)
+  const computedPokemonsCaught = computed(() => {
+    return state.pokemons.filter((pokemon) => state.pokemonsCaught.has(pokemon.id))
+  })
 
   return {
     state,
     loadPokemons,
     catchPokemonById,
     getTypeListById,
-    pokemonsCaught,
     activeLayout,
     toggleViewMode,
+    computedPokemonsCaught,
   }
 })

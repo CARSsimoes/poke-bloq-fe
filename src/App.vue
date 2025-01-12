@@ -29,7 +29,12 @@ const { toggleViewMode } = usePokemonsStore()
 .app__nav-container {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+
   margin-bottom: 2rem;
+  @media (min-width: 720px) {
+    flex-direction: row;
+  }
 }
 
 nav {

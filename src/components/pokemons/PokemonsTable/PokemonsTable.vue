@@ -2,9 +2,9 @@
 import AppTableHeader from '@/components/app/AppTableHeader/AppTableHeader.vue'
 import PokemonsTableRow from '@/components/pokemons/PokemonTableRow/PokemonTableRow.vue'
 import { POKEDEX_TABLE_COLUMNS } from '@/shared/constants/variables'
-import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
+import { usePokemonsByRoute } from '@/composables/usePokemonsByRoute/usePokemonsByRoute'
 
-const pokemonsStore = usePokemonsStore()
+const { pokemons } = usePokemonsByRoute()
 </script>
 
 <template>
@@ -12,7 +12,7 @@ const pokemonsStore = usePokemonsStore()
     <AppTableHeader :columns="POKEDEX_TABLE_COLUMNS" />
     <tbody>
       <tr
-        v-for="pokemon in pokemonsStore.state.pokemons"
+        v-for="pokemon in pokemons"
         :key="pokemon.name"
         :class="{ 'pokemons-table--caught': pokemon.caught }"
         class="pokemons-table"
