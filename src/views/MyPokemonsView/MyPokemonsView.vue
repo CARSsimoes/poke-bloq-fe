@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 import LayoutViewsSwapper from '../LayoutViewsSwapper/LayoutViewsSwapper.vue'
+import LayoutType from '@/shared/layouts/layouts'
+
+interface Props {
+  activeLayout: LayoutType
+}
+
+defineProps<Props>()
 
 const pokemonsStore = usePokemonsStore()
 
@@ -15,12 +22,14 @@ function downloadPokemonCSV() {
     <p>
       Caughthed:
       {{
-        `${pokemonsStore.computedPokemonsCaught.length} / ${pokemonsStore.state.totalNumberOfPokemons}`
+        `${pokemonsStore.totalNumberOfPokemonsCaught} / ${pokemonsStore.state.totalNumberOfPokemons}`
       }}
     </p>
-    <button @click="downloadPokemonCSV">Download</button>
+    <button @click="downloadPokemonCSV" :disabled="pokemonsStore.hasPokemonsCaught">
+      Download
+    </button>
   </div>
-  <LayoutViewsSwapper :layoutType="pokemonsStore.activeLayout" />
+  <LayoutViewsSwapper :layoutType="activeLayout" />
 </template>
 
 <style scoped lang="scss">

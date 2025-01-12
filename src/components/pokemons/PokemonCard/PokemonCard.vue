@@ -19,7 +19,7 @@ const { getTypeListById } = usePokemonsStore()
     class="pokemon-card"
     :class="{ 'pokemon-card--caught': pokemonDetail.caught, 'pokemon-card--selected': isSelected }"
     :style="{
-      backgroundColor: `var(--${pokemonDetail.types[0].type.name.toLowerCase()})`,
+      backgroundColor: `var(--${pokemonDetail.types[0]?.type.name.toLowerCase()})`,
     }"
   >
     <PokemonId

@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import AppToggle from '@/components/app/AppToggle/AppToggle.vue'
 import LayoutType from '@/shared/layouts/layouts'
-import { usePokemonsStore } from './stores/pokemons/usePokemonsStore'
+import { computed, ref } from 'vue'
 
-const { toggleViewMode } = usePokemonsStore()
+const isCardView = ref<boolean>(false)
+const toggleViewMode = () => {
+  isCardView.value = !isCardView.value
+}
+
+const activeLayout = computed(() => (isCardView.value ? LayoutType.CARD : LayoutType.TABLE))
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const { toggleViewMode } = usePokemonsStore()
     />
   </div>
 
-  <router-view />
+  <router-view :activeLayout="activeLayout" />
 </template>
 
 <style scoped lang="scss">

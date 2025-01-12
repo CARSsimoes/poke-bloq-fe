@@ -1,3 +1,5 @@
+import type { PokemonType } from './colors'
+
 export interface IPokemon {
   name: string
   url: string
@@ -11,7 +13,7 @@ export interface IPokemonSprites {
 export interface IPokemonTypes {
   slot: number
   type: {
-    name: string
+    name: PokemonType
     url: string
   }
 }
@@ -24,12 +26,12 @@ export interface IPokemonStat {
 }
 
 export interface BasePokemonStats {
-  hp: number
-  speed: number
-  attack: number
-  defense: number
-  specialAttack: number
-  specialDefense: number
+  hp: number | undefined
+  speed: number | undefined
+  attack: number | undefined
+  defense: number | undefined
+  specialAttack: number | undefined
+  specialDefense: number | undefined
 }
 
 export interface BasePokemonDetails {

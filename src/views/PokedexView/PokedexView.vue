@@ -2,6 +2,13 @@
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 import { onMounted } from 'vue'
 import LayoutViewsSwapper from '../LayoutViewsSwapper/LayoutViewsSwapper.vue'
+import LayoutType from '@/shared/layouts/layouts'
+
+interface Props {
+  activeLayout: LayoutType
+}
+
+defineProps<Props>()
 
 const pokemonsStore = usePokemonsStore()
 
@@ -11,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <LayoutViewsSwapper :layoutType="pokemonsStore.activeLayout" />
+  <LayoutViewsSwapper :layoutType="activeLayout" />
 </template>
 
 <style scoped lang="scss">

@@ -11,7 +11,7 @@ export const usePokemonsByRoute = () => {
       return pokemonsStore.state.pokemons
     }
     if (route.path === '/my-pokemons') {
-      return pokemonsStore.computedPokemonsCaught
+      return pokemonsStore.state.pokemonsCaught
     }
     return []
   })

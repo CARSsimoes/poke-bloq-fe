@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { PokemonType } from '@/shared/types/colors'
+
 interface Props {
-  name: string
+  name: PokemonType
 }
 
 defineProps<Props>()

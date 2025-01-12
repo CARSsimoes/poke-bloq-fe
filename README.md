@@ -1,6 +1,6 @@
 ## node version
 
-Please has installed a node version of 18.19.0 or higher
+Please has installed a node version of 20.18.0 or higher
 
 ## install dependencies
 

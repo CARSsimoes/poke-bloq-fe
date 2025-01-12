@@ -1,18 +1,17 @@
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import pokemonsService from '@/services/pokemons/pokemonsService'
-import type { IPokemon, IPokemonDetail, IPokemonTypes } from '@/shared/types/pokemon'
+import type { IPokemonDetail, IPokemonTypes } from '@/shared/types/pokemon'
 import type { PokemonDetailsData } from '@/shared/types/api'
 import { LIMIT_NUMBER_OF_POKEMONS } from '@/shared/constants/variables'
 import { formatDateToDMY } from '@/shared/helpers/formatDate'
-import LayoutType from '@/shared/layouts/layouts'
 
 interface State {
   pokemons: IPokemonDetail[]
   isLoading: boolean
   error: string | null
   totalNumberOfPokemons: number
-  pokemonsCaught: Set<number>
+  pokemonsCaught: IPokemonDetail[]
 }
 export const usePokemonsStore = defineStore('pokemons', () => {
   const state = reactive<State>({
@@ -20,16 +19,12 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     isLoading: false,
     error: null,
     totalNumberOfPokemons: 0,
-    pokemonsCaught: new Set<number>(),
+    pokemonsCaught: [],
   })
 
-  const isCardView = ref<boolean>(false)
+  const hasPokemonsCaught = computed(() => state.pokemonsCaught.length === 0)
 
-  const toggleViewMode = () => {
-    isCardView.value = !isCardView.value
-  }
-
-  const activeLayout = computed(() => (isCardView.value ? LayoutType.CARD : LayoutType.TABLE))
+  const totalNumberOfPokemonsCaught = computed(() => state.pokemonsCaught.length)
 
   const mapPokemonDetails = (details: PokemonDetailsData): IPokemonDetail => {
     return {
@@ -37,12 +32,12 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       id: details.id,
       height: details.height,
       weight: details.weight,
-      hp: details.stats[0].base_stat,
-      attack: details.stats[1].base_stat,
-      defense: details.stats[2].base_stat,
-      specialAttack: details.stats[3].base_stat,
-      specialDefense: details.stats[4].base_stat,
-      speed: details.stats[5].base_stat,
+      hp: details.stats[0]?.base_stat,
+      attack: details.stats[1]?.base_stat,
+      defense: details.stats[2]?.base_stat,
+      specialAttack: details.stats[3]?.base_stat,
+      specialDefense: details.stats[4]?.base_stat,
+      speed: details.stats[5]?.base_stat,
       types: details.types,
       image: details.sprites.front_default,
       caught: false,
@@ -50,8 +45,8 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     }
   }
 
-  const fetchPokemonDetails = async (pokemon: IPokemon): Promise<IPokemonDetail> => {
-    const { data: details } = await pokemonsService.getPokemonDetails(pokemon.url)
+  const fetchPokemonDetails = async (pokemonName: string): Promise<IPokemonDetail> => {
+    const { data: details } = await pokemonsService.getPokemonDetails(pokemonName)
     return mapPokemonDetails(details)
   }
 
@@ -61,7 +56,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
         state.isLoading = true
         const { data } = await pokemonsService.getPokemons(limit, offset)
         state.totalNumberOfPokemons = data.count
-        const pokes = await Promise.all(data.results.map(fetchPokemonDetails))
+        const pokes = await Promise.all(data.results.map((poke) => fetchPokemonDetails(poke.name)))
         state.pokemons = pokes
       }
     } catch (e) {
@@ -79,14 +74,13 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       pokemon.caught = !pokemon.caught
 
       if (pokemon.caught) {
-        // Add to the caught set
-        state.pokemonsCaught.add(pokemon.id)
+        state.pokemonsCaught.push(pokemon)
 
-        // Set the timestamp if not already set
         if (!pokemon.timestamp) pokemon.timestamp = formatDateToDMY()
       } else {
-        // Remove from the caught set
-        state.pokemonsCaught.delete(pokemon.id)
+        state.pokemonsCaught = state.pokemonsCaught.filter(
+          (caughtPokemon) => caughtPokemon.id !== pokemon.id,
+        )
       }
     }
   }
@@ -96,17 +90,12 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     return pokemon?.types || []
   }
 
-  const computedPokemonsCaught = computed(() => {
-    return state.pokemons.filter((pokemon) => state.pokemonsCaught.has(pokemon.id))
-  })
-
   return {
     state,
     loadPokemons,
     catchPokemonById,
     getTypeListById,
-    activeLayout,
-    toggleViewMode,
-    computedPokemonsCaught,
+    hasPokemonsCaught,
+    totalNumberOfPokemonsCaught,
   }
 })

@@ -17,7 +17,7 @@ const { pokemons } = usePokemonsByRoute()
         :class="{ 'pokemons-table--caught': pokemon.caught }"
         class="pokemons-table"
         :style="{
-          backgroundColor: `var(--${pokemon.types[0].type.name.toLowerCase()})`,
+          backgroundColor: `var(--${pokemon.types[0]?.type.name.toLowerCase()})`,
         }"
       >
         <PokemonsTableRow :pokemonDetail="pokemon" />
