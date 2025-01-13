@@ -15,6 +15,10 @@ vi.mock('@/services/pokemons/pokemonsService', () => ({
   },
 }))
 
+vi.mock('@/shared/helpers/formatDate', () => ({
+  formatDateToDMY: vi.fn(() => '12/01/2025'),
+}))
+
 describe('usePokemonsStore ->', () => {
   let store: ReturnType<typeof usePokemonsStore>
 
@@ -84,25 +88,64 @@ describe('usePokemonsStore ->', () => {
         expect(pokemonsStore.state.pokemons).toHaveLength(0)
       })
     })
-  })
+    describe('getTypeListById', () => {
+      beforeEach(() => {
+        store = usePokemonsStore()
+      })
 
-  describe('getTypeListById', () => {
-    beforeEach(() => {
-      store = usePokemonsStore()
+      it('should return an empty aray if there is no pokemon found', () => {
+        const result: IPokemonTypes[] = store.getTypeListById(1)
+        expect(result).toEqual([])
+      })
+
+      it('should return the types of the Pokémon with the given id', () => {
+        store.state.pokemons = [mockIPokemonDetail1({ caught: true }), mockIPokemonDetail2]
+        const result: IPokemonTypes[] = store.getTypeListById(1)
+        expect(result).toEqual([
+          { slot: 1, type: { name: 'grass', url: 'fake_url_grass' } },
+          { slot: 2, type: { name: 'poison', url: 'fake_url_poison' } },
+        ])
+      })
     })
+    describe('catchPokemonById', () => {
+      it('should catch a Pokémon and add it to the caught list', () => {
+        const pokemonsStore = usePokemonsStore()
+        const mockPokemon = mockIPokemonDetail1({ caught: false })
 
-    it('should return an empty aray if there is no pokemon found', () => {
-      const result: IPokemonTypes[] = store.getTypeListById(1)
-      expect(result).toEqual([])
-    })
+        pokemonsStore.state.pokemons = [mockPokemon]
+        expect(mockPokemon.caught).toBe(false)
 
-    it('should return the types of the Pokémon with the given id', () => {
-      store.state.pokemons = [mockIPokemonDetail1({ caught: true }), mockIPokemonDetail2]
-      const result: IPokemonTypes[] = store.getTypeListById(1)
-      expect(result).toEqual([
-        { slot: 1, type: { name: 'grass', url: 'fake_url_grass' } },
-        { slot: 2, type: { name: 'poison', url: 'fake_url_poison' } },
-      ])
+        pokemonsStore.catchPokemonById(mockPokemon.id)
+
+        expect(mockPokemon.caught).toBe(true)
+        expect(mockPokemon.timestamp).toBe('12/01/2025')
+      })
+
+      it('should release a Pokémon and remove it from the caught list', () => {
+        const pokemonsStore = usePokemonsStore()
+        const mockPokemon = mockIPokemonDetail1({ caught: true })
+
+        pokemonsStore.state.pokemons = [mockPokemon]
+        pokemonsStore.state.pokemonsCaught = [mockPokemon]
+
+        pokemonsStore.catchPokemonById(mockPokemon.id)
+
+        expect(mockPokemon.caught).toBe(false)
+        expect(pokemonsStore.state.pokemonsCaught).not.toContain(mockPokemon)
+      })
+
+      it('should not overwrite timestamp if it is already set', () => {
+        const pokemonsStore = usePokemonsStore()
+        const mockPokemon = mockIPokemonDetail1({ caught: false })
+        mockPokemon.timestamp = '11/01/2025'
+
+        pokemonsStore.state.pokemons = [mockPokemon]
+
+        pokemonsStore.catchPokemonById(mockPokemon.id)
+
+        expect(mockPokemon.caught).toBe(true)
+        expect(mockPokemon.timestamp).toBe('11/01/2025')
+      })
     })
   })
 })
