@@ -5,7 +5,7 @@ import PokemonId from '@/components/pokemons/PokemonId/PokemonId.vue'
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 
 interface Props {
-  pokemonDetail: IPokemonDetail
+  pokemon: IPokemonDetail
   isSelected: boolean
 }
 
@@ -17,18 +17,22 @@ const { getTypeListById } = usePokemonsStore()
 <template>
   <div
     class="pokemon-card"
-    :class="{ 'pokemon-card--caught': pokemonDetail.caught, 'pokemon-card--selected': isSelected }"
+    :class="{
+      'pokemon-card--caught': pokemon.caught,
+      'pokemon-card--selected': isSelected,
+      'pokemon-card--has-timestamp': Boolean(pokemon.timestamp),
+    }"
     :style="{
-      backgroundColor: `var(--${pokemonDetail.types[0]?.type.name.toLowerCase()})`,
+      backgroundColor: `var(--${pokemon.types[0]?.type.name.toLowerCase()})`,
     }"
   >
     <PokemonId
-      :name="pokemonDetail.name"
-      :image="pokemonDetail.image"
-      :caught="pokemonDetail.caught"
-      :id="pokemonDetail.id"
+      :name="pokemon.name"
+      :image="pokemon.image"
+      :caught="pokemon.caught"
+      :id="pokemon.id"
     />
-    <AppBadgeList :types="getTypeListById(pokemonDetail.id)" />
+    <AppBadgeList :types="getTypeListById(pokemon.id)" />
   </div>
 </template>
 
@@ -36,6 +40,7 @@ const { getTypeListById } = usePokemonsStore()
 @use '@/assets/scss/variables' as vars;
 
 .pokemon-card {
+  border: 0.25rem solid vars.$white;
   color: vars.$white;
   display: flex;
   flex-direction: column;
@@ -43,7 +48,7 @@ const { getTypeListById } = usePokemonsStore()
   border-radius: 1rem;
   padding: 0.2rem;
   opacity: 0.5;
-  width: 8.5rem;
+  width: 8rem;
   @media (min-width: 720px) {
     width: 9.125rem;
   }
@@ -55,7 +60,10 @@ const { getTypeListById } = usePokemonsStore()
 }
 
 .pokemon-card--selected {
-  border-color: #f00;
-  background-color: #fee;
+  border: 0.25rem solid vars.$primary-color;
+}
+
+.pokemon-card--has-timestamp {
+  opacity: 1;
 }
 </style>

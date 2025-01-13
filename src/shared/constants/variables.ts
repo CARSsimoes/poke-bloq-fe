@@ -4,9 +4,9 @@ export const POKEDEX_TABLE_COLUMNS = [
   'Pokemon',
   'Height',
   'Weight',
-  'Types',
   'HP',
   'Attack',
   'Defense',
+  'Types',
   'Caught at',
 ]

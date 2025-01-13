@@ -14,7 +14,7 @@ const { catchPokemonById } = usePokemonsStore()
 </script>
 
 <template>
-  <button class="pokeball-button" @click="catchPokemonById(id)">
+  <button class="pokeball-button" @click.stop="catchPokemonById(id)">
     <img
       v-if="!caught"
       :src="uncaughtPokemon"

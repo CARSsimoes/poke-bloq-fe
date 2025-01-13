@@ -1,21 +1,44 @@
 <script setup lang="ts">
 import AppToggle from '@/components/app/AppToggle/AppToggle.vue'
 import LayoutType from '@/shared/layouts/layouts'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
+import Routes from './shared/types/routes'
+
+const route = useRoute()
+const pokemonsStore = usePokemonsStore()
 
 const isCardView = ref<boolean>(false)
 const toggleViewMode = () => {
   isCardView.value = !isCardView.value
 }
 
-const activeLayout = computed(() => (isCardView.value ? LayoutType.CARD : LayoutType.TABLE))
+const activeLayout = computed(() => (isCardView.value ? LayoutType.TABLE : LayoutType.CARD))
+
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath !== Routes.MY_POKEMONS) {
+      pokemonsStore.clearPokemonsSelection()
+    }
+  },
+)
 </script>
 
 <template>
   <div class="app__nav-container">
     <nav>
-      <router-link to="/">Pokedéx</router-link>
-      <router-link to="/my-pokemons">My Pokemons</router-link>
+      <router-link
+        :to="Routes.HOME"
+        :class="{ 'app__page-title--selected': $route.path === Routes.HOME }"
+        >Pokedéx</router-link
+      >
+      <router-link
+        :to="Routes.MY_POKEMONS"
+        :class="{ 'app__page-title--selected': $route.path === Routes.MY_POKEMONS }"
+        >My Pokemons</router-link
+      >
     </nav>
     <AppToggle
       class="app__toggle-button"
@@ -54,5 +77,9 @@ nav {
 
 .app__toggle-button {
   width: 8rem;
+}
+
+.app__page-title--selected {
+  color: vars.$dark;
 }
 </style>

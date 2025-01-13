@@ -13,7 +13,7 @@ export default mergeConfig(
       coverage: {
         provider: 'istanbul',
         reporter: ['text', 'json', 'html'],
-        exclude: ['**/shared/layouts/**', '**/main.ts', '**/mocks/'],
+        exclude: ['**/shared/layouts/**', '**/main.ts', '**/mocks/', '**/shared/types/**'],
       },
     },
   }),

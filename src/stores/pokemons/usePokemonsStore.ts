@@ -12,6 +12,7 @@ interface State {
   error: string | null
   totalNumberOfPokemons: number
   pokemonsCaught: IPokemonDetail[]
+  pokemonsSelected: Set<number>
 }
 export const usePokemonsStore = defineStore('pokemons', () => {
   const state = reactive<State>({
@@ -20,6 +21,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     error: null,
     totalNumberOfPokemons: 0,
     pokemonsCaught: [],
+    pokemonsSelected: new Set(),
   })
 
   const hasPokemonsCaught = computed(() => state.pokemonsCaught.length === 0)
@@ -96,6 +98,25 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     return pokemon ? pokemon.types : []
   }
 
+  const selectPokemon = (pokemonId: number) => {
+    if (state.pokemonsSelected.has(pokemonId)) {
+      state.pokemonsSelected.delete(pokemonId)
+    } else {
+      state.pokemonsSelected.add(pokemonId)
+    }
+  }
+
+  const selectedSize = computed(() => state.pokemonsSelected.size)
+
+  const clearPokemonsSelection = () => state.pokemonsSelected.clear()
+
+  const removeAllPokemonsSelected = () => {
+    state.pokemonsCaught = state.pokemonsCaught.filter(
+      (pokemon) => !state.pokemonsSelected.has(pokemon.id),
+    )
+    clearPokemonsSelection()
+  }
+
   return {
     state,
     loadPokemons,
@@ -105,5 +126,9 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     totalNumberOfPokemonsCaught,
     mapPokemonDetails,
     fetchPokemonDetails,
+    selectPokemon,
+    selectedSize,
+    clearPokemonsSelection,
+    removeAllPokemonsSelected,
   }
 })
