@@ -2,7 +2,7 @@ import type { PokemonDetailsData } from '@/shared/types/api'
 import type { IPokemonDetail } from '@/shared/types/pokemon'
 
 export const mockPokemonDetailsData1: PokemonDetailsData = {
-  name: 'Pikachu',
+  name: 'pikachu',
   id: 25,
   height: 0.4,
   weight: 60,
@@ -23,7 +23,7 @@ export const mockPokemonDetailsData1: PokemonDetailsData = {
 
 export const mockIPokemonDetail1 = ({ caught = true }: { caught: boolean }): IPokemonDetail => {
   return {
-    name: 'Pikachu',
+    name: 'pikachu',
     id: 25,
     height: 0.4,
     weight: 60.0,
@@ -49,7 +49,7 @@ export const mockIPokemonDetail1 = ({ caught = true }: { caught: boolean }): IPo
 }
 
 export const mockIPokemonDetail2: IPokemonDetail = {
-  name: 'Bulbasaur',
+  name: 'bulbasaur',
   id: 1,
   height: 0.7,
   weight: 6.9,
@@ -76,6 +76,58 @@ export const mockIPokemonDetail2: IPokemonDetail = {
     },
   ],
   image: 'bulbasaur_image_url',
-  caught: true,
-  timestamp: '2025-01-12 15:50',
+  caught: false,
+  timestamp: '',
+}
+
+export const mockPokemon1WithStats = {
+  name: 'pikachu',
+  id: 25,
+  height: 0.4,
+  weight: 60,
+  stats: [
+    { base_stat: 35 },
+    { base_stat: 55 },
+    { base_stat: 40 },
+    { base_stat: 50 },
+    { base_stat: 50 },
+    { base_stat: 90 },
+  ],
+  types: [
+    {
+      slot: 1,
+      type: { name: 'electric', url: 'fake_url' },
+    },
+  ],
+  sprites: {
+    front_default: 'pikachu_image_url',
+  },
+}
+
+export const mockPokemon2WithStats = {
+  name: 'bulbasaur',
+  id: 1,
+  height: 0.7,
+  weight: 6.9,
+  stats: [
+    { base_stat: 45 },
+    { base_stat: 49 },
+    { base_stat: 49 },
+    { base_stat: 65 },
+    { base_stat: 65 },
+    { base_stat: 45 },
+  ],
+  types: [
+    {
+      slot: 1,
+      type: { name: 'grass', url: 'fake_url_grass' },
+    },
+    {
+      slot: 2,
+      type: { name: 'poison', url: 'fake_url_poison' },
+    },
+  ],
+  sprites: {
+    front_default: 'bulbasaur_image_url',
+  },
 }

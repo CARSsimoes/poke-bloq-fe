@@ -1,22 +1,26 @@
-import { describe, it, expect, beforeEach, vi, beforeAll } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createPinia } from 'pinia'
 import { setActivePinia } from 'pinia'
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
-import { mockIPokemonDetail1, mockIPokemonDetail2, mockPokemonDetailsData1 } from '@/mocks/pokemon'
+import {
+  mockIPokemonDetail1,
+  mockIPokemonDetail2,
+  mockPokemon1WithStats,
+  mockPokemonDetailsData1,
+} from '@/mocks/pokemon'
 import pokemonsService from '@/services/pokemons/pokemonsService'
 import type { IPokemonTypes } from '@/shared/types/pokemon'
 
-beforeAll(() => {
+beforeEach(() => {
   setActivePinia(createPinia())
+  vi.clearAllMocks()
 })
+
 vi.mock('@/services/pokemons/pokemonsService', () => ({
   default: {
+    getPokemons: vi.fn(),
     getPokemonDetails: vi.fn(),
   },
-}))
-
-vi.mock('@/shared/helpers/formatDate', () => ({
-  formatDateToDMY: vi.fn(() => '12/01/2025'),
 }))
 
 describe('usePokemonsStore ->', () => {
@@ -88,7 +92,7 @@ describe('usePokemonsStore ->', () => {
         expect(pokemonsStore.state.pokemons).toHaveLength(0)
       })
     })
-    describe('getTypeListById', () => {
+    describe('getTypeListById ->', () => {
       beforeEach(() => {
         store = usePokemonsStore()
       })
@@ -98,7 +102,7 @@ describe('usePokemonsStore ->', () => {
         expect(result).toEqual([])
       })
 
-      it('should return the types of the Pokémon with the given id', () => {
+      it('should return the types of the pokemon with the given id', () => {
         store.state.pokemons = [mockIPokemonDetail1({ caught: true }), mockIPokemonDetail2]
         const result: IPokemonTypes[] = store.getTypeListById(1)
         expect(result).toEqual([
@@ -107,8 +111,11 @@ describe('usePokemonsStore ->', () => {
         ])
       })
     })
-    describe('catchPokemonById', () => {
-      it('should catch a Pokémon and add it to the caught list', () => {
+    describe('catchPokemonById ->', () => {
+      vi.mock('@/shared/helpers/formatDate', () => ({
+        formatDateToDMY: vi.fn(() => '12/01/2025'),
+      }))
+      it('should catch a pokemon and add it to the caught list', () => {
         const pokemonsStore = usePokemonsStore()
         const mockPokemon = mockIPokemonDetail1({ caught: false })
 
@@ -121,7 +128,7 @@ describe('usePokemonsStore ->', () => {
         expect(mockPokemon.timestamp).toBe('12/01/2025')
       })
 
-      it('should release a Pokémon and remove it from the caught list', () => {
+      it('should release a Pokemon and remove it from the caught list', () => {
         const pokemonsStore = usePokemonsStore()
         const mockPokemon = mockIPokemonDetail1({ caught: true })
 
@@ -145,6 +152,41 @@ describe('usePokemonsStore ->', () => {
 
         expect(mockPokemon.caught).toBe(true)
         expect(mockPokemon.timestamp).toBe('11/01/2025')
+      })
+    })
+
+    describe('loadPokemons ->', () => {
+      it('should load Pokemons and set state correctly', async () => {
+        const pokemonsStore = usePokemonsStore()
+
+        pokemonsService.getPokemons = vi.fn().mockResolvedValue({
+          data: {
+            count: 1,
+            results: [{ name: 'pikachu' }],
+          },
+        })
+
+        pokemonsService.getPokemonDetails = vi
+          .fn()
+          .mockImplementation(() => Promise.resolve({ data: mockPokemon1WithStats }))
+
+        await pokemonsStore.loadPokemons()
+
+        expect(pokemonsStore.state.pokemons).toEqual([mockIPokemonDetail1({ caught: false })])
+        expect(pokemonsStore.state.totalNumberOfPokemons).toBe(1)
+        expect(pokemonsStore.state.isLoading).toBe(false)
+      })
+
+      it('should load Pokemons with error', async () => {
+        const pokemonsStore = usePokemonsStore()
+
+        pokemonsService.getPokemons = vi.fn().mockImplementationOnce(() => Promise.reject())
+
+        await pokemonsStore.loadPokemons()
+
+        expect(pokemonsStore.state.pokemons).toEqual([])
+        expect(pokemonsStore.state.totalNumberOfPokemons).toBe(0)
+        expect(pokemonsStore.state.isLoading).toBe(false)
       })
     })
   })
