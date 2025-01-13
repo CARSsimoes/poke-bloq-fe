@@ -46,8 +46,14 @@ export const usePokemonsStore = defineStore('pokemons', () => {
   }
 
   const fetchPokemonDetails = async (pokemonName: string): Promise<IPokemonDetail> => {
-    const { data: details } = await pokemonsService.getPokemonDetails(pokemonName)
-    return mapPokemonDetails(details)
+    try {
+      const { data: details } = await pokemonsService.getPokemonDetails(pokemonName)
+      return mapPokemonDetails(details)
+    } catch (e) {
+      // use monitoring tools like Posthog or Sentry
+      console.log('Failed to fetch Pokémon:', e)
+      return {} as IPokemonDetail
+    }
   }
 
   const loadPokemons = async (limit = LIMIT_NUMBER_OF_POKEMONS, offset = 0): Promise<void> => {
@@ -61,7 +67,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       }
     } catch (e) {
       // use monitoring tools like Posthog or Sentry
-      console.log('error', e)
+      console.log('Failed to load Pokémons:', e)
     } finally {
       state.isLoading = false
     }
@@ -87,7 +93,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
 
   const getTypeListById = (id: number): IPokemonTypes[] => {
     const pokemon = state.pokemons.find((poke) => poke.id === id)
-    return pokemon?.types || []
+    return pokemon ? pokemon.types : []
   }
 
   return {
@@ -97,5 +103,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     getTypeListById,
     hasPokemonsCaught,
     totalNumberOfPokemonsCaught,
+    mapPokemonDetails,
+    fetchPokemonDetails,
   }
 })
