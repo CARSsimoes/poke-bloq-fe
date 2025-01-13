@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { createPinia } from 'pinia'
 import { setActivePinia } from 'pinia'
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
@@ -14,6 +14,11 @@ import type { IPokemonTypes } from '@/shared/types/pokemon'
 beforeEach(() => {
   setActivePinia(createPinia())
   vi.clearAllMocks()
+  vi.spyOn(console, 'log').mockImplementation(() => {})
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
 })
 
 vi.mock('@/services/pokemons/pokemonsService', () => ({
