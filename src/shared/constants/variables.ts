@@ -5,8 +5,11 @@ export const POKEDEX_TABLE_COLUMNS = [
   'Height',
   'Weight',
   'HP',
+  'Speed',
   'Attack',
   'Defense',
+  'Special Attack',
+  'Special Defense',
   'Types',
   'Caught at',
 ]

@@ -26,12 +26,17 @@ const { getTypeListById } = usePokemonsStore()
   <td>{{ pokemonDetail.height }}</td>
   <td>{{ pokemonDetail.weight }}</td>
   <td>{{ pokemonDetail.hp }}</td>
+  <td>{{ pokemonDetail.speed }}</td>
   <td>{{ pokemonDetail.attack }}</td>
   <td>{{ pokemonDetail.defense }}</td>
-  <td>
+  <td>{{ pokemonDetail.specialAttack }}</td>
+  <td>{{ pokemonDetail.specialDefense }}</td>
+  <td class="pokemon-table-row__types-container">
     <AppBadgeList :types="getTypeListById(pokemonDetail.id)" />
   </td>
-  <td v-if="$route.path !== Routes.MY_POKEMONS">{{ pokemonDetail.timestamp }}</td>
+  <td v-if="$route.path !== Routes.MY_POKEMONS" class="pokemon-table-row--break-text">
+    {{ pokemonDetail.timestamp }}
+  </td>
 </template>
 
 <style scoped lang="scss">
@@ -44,5 +49,15 @@ td {
 td {
   padding: 0.75rem;
   text-align: center;
+}
+
+.pokemon-table-row--break-text {
+  word-wrap: break-word;
+  white-space: normal;
+  width: 6rem;
+}
+
+.pokemon-table-row__types-container {
+  min-width: 8rem;
 }
 </style>

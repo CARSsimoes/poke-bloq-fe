@@ -45,7 +45,7 @@ const filteredColumns = computed(() => {
   </table>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/assets/scss/variables' as vars;
 
 table {
