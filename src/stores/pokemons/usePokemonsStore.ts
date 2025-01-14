@@ -110,11 +110,34 @@ export const usePokemonsStore = defineStore('pokemons', () => {
 
   const clearPokemonsSelection = () => state.pokemonsSelected.clear()
 
-  const removeAllPokemonsSelected = () => {
+  const removeAllPokemonsSelected = (): void => {
     state.pokemonsCaught = state.pokemonsCaught.filter(
       (pokemon) => !state.pokemonsSelected.has(pokemon.id),
     )
+
+    state.pokemons.forEach((pokemon) => {
+      if (state.pokemonsSelected.has(pokemon.id)) {
+        pokemon.caught = false
+      }
+    })
+
     clearPokemonsSelection()
+  }
+
+  const hasPokemonsSelected = computed(() => state.pokemonsSelected.size > 0)
+
+  const removePokemon = (id: number): void => {
+    state.pokemonsCaught = state.pokemonsCaught.filter((pokemon) => pokemon.id !== id)
+
+    const pokemon = state.pokemons.find((poke) => poke.id === id)
+    if (pokemon) {
+      pokemon.caught = false
+    }
+  }
+
+  const searchPokemonNameById = (id: number): string | undefined => {
+    const pokemon = state.pokemonsCaught.find((poke) => poke.id === id)
+    return pokemon?.name
   }
 
   return {
@@ -130,5 +153,8 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     selectedSize,
     clearPokemonsSelection,
     removeAllPokemonsSelected,
+    hasPokemonsSelected,
+    removePokemon,
+    searchPokemonNameById,
   }
 })

@@ -8,14 +8,6 @@ import Routes from '@/shared/types/routes'
 const { pokemons } = usePokemonsByRoute()
 const route = useRoute()
 const pokemonsStore = usePokemonsStore()
-
-let debounceTimeout: ReturnType<typeof setTimeout> | null = null
-const handleDoubleClick = (pokemonId: number) => {
-  if (debounceTimeout) clearTimeout(debounceTimeout)
-  debounceTimeout = setTimeout(() => {
-    pokemonsStore.selectPokemon(pokemonId)
-  }, 100)
-}
 </script>
 
 <template>
@@ -23,7 +15,9 @@ const handleDoubleClick = (pokemonId: number) => {
     <li
       v-for="pokemon in pokemons"
       :key="pokemon.id"
-      @dblclick.stop="route.path === Routes.MY_POKEMONS ? handleDoubleClick(pokemon.id) : null"
+      @dblclick.stop="
+        route.path === Routes.MY_POKEMONS ? pokemonsStore.selectPokemon(pokemon.id) : null
+      "
     >
       <PokemonCard
         :pokemon="pokemon"

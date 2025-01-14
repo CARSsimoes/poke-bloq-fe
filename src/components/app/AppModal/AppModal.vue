@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineEmits } from 'vue'
-
 interface Props {
   isVisible: boolean
 }
@@ -50,16 +48,20 @@ const closeModal = () => {
 .modal-content {
   background: vars.$white;
   padding: 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 1.25rem;
   box-shadow: 0 0.25rem 0.5rem vars.$box-shadow;
   position: relative;
-  max-width: 31.25rem;
-  width: 100%;
+  max-width: 30rem;
+  width: 80%;
+  @media (min-width: 720px) {
+    width: 100%;
+  }
 }
 
 .modal-header,
 .modal-footer {
-  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .modal-close {

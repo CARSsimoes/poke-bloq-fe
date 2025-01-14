@@ -1,30 +1,46 @@
 <script setup lang="ts">
-import Modal from '@/components/app/AppModal/AppModal.vue'
-import { ref } from 'vue'
+import AppModal from '@/components/app/AppModal/AppModal.vue'
+import AppButton from '@/components/app/AppButton/AppButton.vue'
+import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 
-const isModalVisible = ref(false)
-
-const openModal = () => {
-  isModalVisible.value = true
+interface Props {
+  isVisible: boolean
+  closeModal: () => void
+  pokemonId: number
 }
 
-const closeModal = () => {
-  isModalVisible.value = false
+const props = defineProps<Props>()
+
+const pokemonsStore = usePokemonsStore()
+
+const removePokemon = () => {
+  pokemonsStore.removePokemon(props.pokemonId)
+  props.closeModal()
 }
 </script>
 
 <template>
-  <button @click="openModal">Open Modal</button>
-
-  <Modal :isVisible="isModalVisible" @close="closeModal">
+  <AppModal :isVisible="isVisible" @close="closeModal">
     <template #header>
-      <h2>Modal Header</h2>
+      <h2>Are you sure?</h2>
     </template>
     <template #body>
-      <p>This is the body of the modal.</p>
+      <p>
+        <span class="pokemon-modal-remove__name"
+          ><b>{{ pokemonsStore.searchPokemonNameById(pokemonId) }}</b></span
+        >
+        will return to the wild 😞
+      </p>
     </template>
     <template #bottom>
-      <button @click="closeModal">Close</button>
+      <AppButton text="Cancel" :action="closeModal" />
+      <AppButton text="Confirm" :action="removePokemon" />
     </template>
-  </Modal>
+  </AppModal>
 </template>
+
+<style scoped lang="scss">
+.pokemon-modal-remove__name {
+  text-transform: capitalize;
+}
+</style>

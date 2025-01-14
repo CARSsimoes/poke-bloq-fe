@@ -5,10 +5,12 @@ const pokemonsStore = usePokemonsStore()
 </script>
 
 <template>
-  <div v-if="pokemonsStore.selectedSize > 0" class="pokemons-selection">
-    <p>Selected: {{ pokemonsStore.selectedSize }}</p>
-    <button @click="pokemonsStore.clearPokemonsSelection()">Cancel</button>
-    <button @click="pokemonsStore.removeAllPokemonsSelected()">Remove</button>
+  <div v-if="pokemonsStore.hasPokemonsSelected" class="pokemons-selection">
+    <p>{{ pokemonsStore.selectedSize }} pokemon(s) will return to the wild 😞</p>
+    <div class="pokemons-selection__buttons-container">
+      <button @click="pokemonsStore.clearPokemonsSelection()">Cancel</button>
+      <button @click="pokemonsStore.removeAllPokemonsSelected()">Remove</button>
+    </div>
   </div>
 </template>
 
@@ -26,8 +28,8 @@ const pokemonsStore = usePokemonsStore()
   box-shadow: 0 0.25rem 0.5rem vars.$box-shadow;
   z-index: 1000;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
 }
 
 .pokemons-selection button {
@@ -36,5 +38,11 @@ const pokemonsStore = usePokemonsStore()
   color: vars.$white;
   border: none;
   cursor: pointer;
+}
+
+.pokemons-selection__buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 </style>
