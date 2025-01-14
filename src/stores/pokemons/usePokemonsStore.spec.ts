@@ -51,6 +51,29 @@ describe('usePokemonsStore ->', () => {
 
       expect(store.hasPokemonsCaught).toBe(false)
     })
+
+    describe('selectedSize ->', () => {
+      it('should return 0 when no Pokémon are selected', () => {
+        expect(store.selectedSize).toBe(0)
+      })
+
+      it('should return the correct size when Pokémon are selected', () => {
+        store.state.pokemonsSelected.add(1)
+        store.state.pokemonsSelected.add(2)
+        expect(store.selectedSize).toBe(2)
+      })
+    })
+
+    describe('hasPokemonsSelected ->', () => {
+      it('should return false when no Pokémon are selected', () => {
+        expect(store.hasPokemonsSelected).toBe(false)
+      })
+
+      it('should return true when Pokémon are selected', () => {
+        store.state.pokemonsSelected.add(1)
+        expect(store.hasPokemonsSelected).toBe(true)
+      })
+    })
   })
 
   describe('methods ->', () => {
@@ -67,7 +90,7 @@ describe('usePokemonsStore ->', () => {
     })
 
     describe('fetchPokemonDetails ->', () => {
-      it('with sucess - should fetch details and map them to IPokemonDetail with sucess', () => {
+      it('with sucess - should fetch details and map them to IPokemonDetail with sucess', async () => {
         const mockPokemonName = 'pikachu'
         const pokemonsStore = usePokemonsStore()
 
@@ -81,18 +104,18 @@ describe('usePokemonsStore ->', () => {
           }),
         )
 
-        pokemonsStore.fetchPokemonDetails(mockPokemonName)
+        await pokemonsStore.fetchPokemonDetails(mockPokemonName)
 
         expect(pokemonsService.getPokemonDetails).toHaveBeenCalledWith(mockPokemonName)
       })
 
-      it('with error - should not fetch details', () => {
+      it('with error - should not fetch details', async () => {
         const mockPokemonName = 'pikachu'
         const pokemonsStore = usePokemonsStore()
 
         pokemonsService.getPokemonDetails = vi.fn().mockImplementationOnce(() => Promise.reject())
 
-        pokemonsStore.fetchPokemonDetails(mockPokemonName)
+        await pokemonsStore.fetchPokemonDetails(mockPokemonName)
 
         expect(pokemonsStore.state.pokemons).toHaveLength(0)
       })
@@ -192,6 +215,96 @@ describe('usePokemonsStore ->', () => {
         expect(pokemonsStore.state.pokemons).toEqual([])
         expect(pokemonsStore.state.totalNumberOfPokemons).toBe(0)
         expect(pokemonsStore.state.isLoading).toBe(false)
+      })
+    })
+
+    describe('selectPokemon ->', () => {
+      it('should add a Pokémon ID to the selection if not already selected', () => {
+        store.selectPokemon(1)
+        expect(store.state.pokemonsSelected.has(1)).toBe(true)
+      })
+
+      it('should remove a Pokémon ID from the selection if already selected', () => {
+        store.state.pokemonsSelected.add(1)
+        store.selectPokemon(1)
+        expect(store.state.pokemonsSelected.has(1)).toBe(false)
+      })
+    })
+
+    describe('clearPokemonsSelection ->', () => {
+      it('should clear the selected Pokémon set', () => {
+        store.state.pokemonsSelected.add(1)
+        store.state.pokemonsSelected.add(2)
+        expect(store.selectedSize).toBe(2)
+
+        store.clearPokemonsSelection()
+        expect(store.selectedSize).toBe(0)
+      })
+    })
+
+    describe('searchPokemonNameById ->', () => {
+      it('should return the correct Pokémon name when the ID exists', () => {
+        store.state.pokemonsCaught = [mockIPokemonDetail2]
+        const result1 = store.searchPokemonNameById(1)
+        expect(result1).toBe('bulbasaur')
+        const result2 = store.searchPokemonNameById(2)
+        expect(result2).toBeUndefined()
+      })
+
+      it('should return undefined when the pokemonsCaught array is empty', () => {
+        store.state.pokemonsCaught = []
+
+        const result = store.searchPokemonNameById(1)
+        expect(result).toBeUndefined()
+      })
+    })
+
+    describe('removePokemon ->', () => {
+      it('should remove the Pokémon with the given ID from the pokemonsCaught array', () => {
+        store.state.pokemonsCaught = [mockIPokemonDetail2]
+
+        store.state.pokemons = [mockIPokemonDetail2]
+
+        store.removePokemon(1)
+
+        expect(store.state.pokemonsCaught).toEqual([])
+      })
+
+      it('should not modify the arrays if the ID does not exist', () => {
+        store.state.pokemonsCaught = [mockIPokemonDetail2]
+
+        store.state.pokemons = [mockIPokemonDetail2]
+
+        store.removePokemon(3)
+
+        expect(store.state.pokemonsCaught).toEqual([mockIPokemonDetail2])
+        expect(store.state.pokemons).toEqual([mockIPokemonDetail2])
+      })
+    })
+
+    describe('removeAllPokemonsSelected ->', () => {
+      it('should remove Pokémon in the selected set from the pokemonsCaught array', () => {
+        store.state.pokemonsCaught = [mockIPokemonDetail2]
+
+        store.state.pokemons = [mockIPokemonDetail2]
+
+        store.state.pokemonsSelected = new Set([1])
+
+        store.removeAllPokemonsSelected()
+
+        expect(store.state.pokemonsCaught).toEqual([])
+      })
+
+      it('should clear the pokemonsSelected set after removing Pokémon', () => {
+        store.state.pokemonsCaught = [mockIPokemonDetail2]
+
+        store.state.pokemons = [mockIPokemonDetail2]
+
+        store.state.pokemonsSelected = new Set([1])
+
+        store.removeAllPokemonsSelected()
+
+        expect(store.state.pokemonsSelected.size).toBe(0)
       })
     })
   })
