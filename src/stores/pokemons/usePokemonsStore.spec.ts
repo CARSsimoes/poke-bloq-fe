@@ -215,6 +215,7 @@ describe('usePokemonsStore ->', () => {
         expect(pokemonsStore.state.pokemons).toEqual([])
         expect(pokemonsStore.state.totalNumberOfPokemons).toBe(0)
         expect(pokemonsStore.state.isLoading).toBe(false)
+        expect(pokemonsStore.state.error).toBe(true)
       })
     })
 

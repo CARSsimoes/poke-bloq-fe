@@ -13,13 +13,22 @@ defineProps<Props>()
 
 const pokemonsStore = usePokemonsStore()
 
-onMounted(() => {
+const fetchPokemons = () => {
+  pokemonsStore.state.error = false
   pokemonsStore.loadPokemons()
+}
+
+onMounted(() => {
+  fetchPokemons()
 })
 </script>
 
 <template>
   <AppLoading v-if="pokemonsStore.state.isLoading" />
+  <div v-else-if="pokemonsStore.state.error" class="error-message">
+    <p>Some error occur, please try again</p>
+    <button @click="fetchPokemons()">Retry</button>
+  </div>
   <LayoutViewsSwapper v-else :layoutType="activeLayout" />
 </template>
 

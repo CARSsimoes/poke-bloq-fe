@@ -9,7 +9,7 @@ import { formatDateToDMY } from '@/shared/helpers/formatDate'
 interface State {
   pokemons: IPokemonDetail[]
   isLoading: boolean
-  error: string | null
+  error: boolean
   totalNumberOfPokemons: number
   pokemonsCaught: IPokemonDetail[]
   pokemonsSelected: Set<number>
@@ -18,7 +18,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
   const state = reactive<State>({
     pokemons: [],
     isLoading: false,
-    error: null,
+    error: false,
     totalNumberOfPokemons: 0,
     pokemonsCaught: [],
     pokemonsSelected: new Set(),
@@ -68,6 +68,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
         state.pokemons = pokes
       }
     } catch (e) {
+      state.error = true
       // use monitoring tools like Posthog or Sentry
       console.log('Failed to load Pokémons:', e)
     } finally {
