@@ -4,6 +4,7 @@ import LayoutViewsSwapper from '../LayoutViewsSwapper/LayoutViewsSwapper.vue'
 import LayoutType from '@/shared/layouts/layouts'
 import PokemonsSelection from '@/components/pokemons/PokemonsSelection/PokemonsSelection.vue'
 import AppButton from '@/components/app/AppButton/AppButton.vue'
+import useExportCSV from '@/composables/useExportCSV/useExportCSV'
 
 interface Props {
   activeLayout: LayoutType
@@ -12,10 +13,10 @@ interface Props {
 defineProps<Props>()
 
 const pokemonsStore = usePokemonsStore()
+const { downloadCSV } = useExportCSV()
 
 function downloadPokemonCSV() {
-  // downloadCSV(pokemonsStore.state.pokemonsCaught, 'pokemons.csv')
-  console.log('download')
+  downloadCSV(pokemonsStore.state.pokemonsCaught, 'pokemons.csv')
 }
 </script>
 
