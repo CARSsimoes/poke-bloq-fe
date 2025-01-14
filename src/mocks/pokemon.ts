@@ -1,5 +1,5 @@
 import type { PokemonDetailsData } from '@/shared/types/api'
-import type { IPokemonDetail } from '@/shared/types/pokemon'
+import type { IPokemonDetail, IPokemonTypes } from '@/shared/types/pokemon'
 
 export const mockPokemonDetailsData1: PokemonDetailsData = {
   name: 'pikachu',
@@ -131,3 +131,20 @@ export const mockPokemon2WithStats = {
     front_default: 'bulbasaur_image_url',
   },
 }
+
+export const mockTypes: IPokemonTypes[] = [
+  {
+    slot: 1,
+    type: {
+      name: 'fire',
+      url: 'https://pokeapi.co/api/v2/type/fire',
+    },
+  },
+  {
+    slot: 2,
+    type: {
+      name: 'water',
+      url: 'https://pokeapi.co/api/v2/type/water',
+    },
+  },
+]

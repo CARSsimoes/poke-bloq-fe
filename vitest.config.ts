@@ -14,6 +14,7 @@ export default mergeConfig(
         provider: 'istanbul',
         reporter: ['text', 'json', 'html'],
         exclude: ['**/shared/layouts/**', '**/main.ts', '**/mocks/', '**/shared/types/**'],
+        enabled: false,
       },
     },
   }),
