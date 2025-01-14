@@ -3,7 +3,7 @@ import axios from '@/plugins/axios/axios'
 
 export default {
   getPokemons(limit: number, offset: number): Promise<PokemonsListApiResponse> {
-    return axios.get('pokemon', {
+    return axios.get('pokemon-species', {
       params: { limit, offset },
     })
   },

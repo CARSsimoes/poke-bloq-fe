@@ -1,15 +1,32 @@
 <script setup lang="ts">
+import { onUnmounted, watchEffect } from 'vue'
+
 interface Props {
   isVisible: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const emit = defineEmits(['close'])
 
 const closeModal = () => {
   emit('close')
 }
+
+watchEffect(() => {
+  if (props.isVisible) {
+    document.body.style.overflow = 'hidden'
+    document.body.style.pointerEvents = 'none'
+  } else {
+    document.body.style.overflow = ''
+    document.body.style.pointerEvents = ''
+  }
+})
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+  document.body.style.pointerEvents = ''
+})
 </script>
 
 <template>
@@ -51,6 +68,8 @@ const closeModal = () => {
   position: relative;
   max-width: 30rem;
   width: 80%;
+  z-index: 1001;
+  pointer-events: all;
   @media (min-width: 720px) {
     width: 100%;
   }

@@ -8,6 +8,7 @@ import { formatDateToDMY } from '@/shared/helpers/formatDate'
 
 interface State {
   pokemons: IPokemonDetail[]
+  isInitialLoading: boolean
   isLoading: boolean
   error: boolean
   totalNumberOfPokemons: number
@@ -17,6 +18,7 @@ interface State {
 export const usePokemonsStore = defineStore('pokemons', () => {
   const state = reactive<State>({
     pokemons: [],
+    isInitialLoading: false,
     isLoading: false,
     error: false,
     totalNumberOfPokemons: 0,
@@ -58,21 +60,33 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     }
   }
 
-  const loadPokemons = async (limit = LIMIT_NUMBER_OF_POKEMONS, offset = 0): Promise<void> => {
+  const loadPokemons = async (
+    limit = LIMIT_NUMBER_OF_POKEMONS,
+    offset = state.pokemons.length,
+  ): Promise<void> => {
     try {
       if (state.pokemons.length === 0) {
-        state.isLoading = true
-        const { data } = await pokemonsService.getPokemons(limit, offset)
-        state.totalNumberOfPokemons = data.count
-        const pokes = await Promise.all(data.results.map((poke) => fetchPokemonDetails(poke.name)))
-        state.pokemons = pokes
+        state.isInitialLoading = true
       }
+      state.isLoading = true
+
+      const container = document.documentElement || document.body
+      const previousScrollPosition = container.scrollTop
+
+      const { data } = await pokemonsService.getPokemons(limit, offset)
+      state.totalNumberOfPokemons = data.count
+      const pokes = await Promise.all(data.results.map((poke) => fetchPokemonDetails(poke.name)))
+
+      state.pokemons = [...state.pokemons, ...pokes]
+
+      container.scrollTop = previousScrollPosition
     } catch (e) {
       state.error = true
       // use monitoring tools like Posthog or Sentry
       console.log('Failed to load Pokémons:', e)
     } finally {
       state.isLoading = false
+      state.isInitialLoading = false
     }
   }
 

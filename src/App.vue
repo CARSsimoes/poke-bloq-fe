@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 import Routes from './shared/types/routes'
+import AppButtonGoToTop from '@/components/app/AppButtonGoToTop/AppButtonGoToTop.vue'
 
 const route = useRoute()
 const pokemonsStore = usePokemonsStore()
@@ -49,6 +50,9 @@ watch(
   </div>
 
   <router-view :activeLayout="activeLayout" />
+
+  <!-- Scroll to top button -->
+  <AppButtonGoToTop />
 </template>
 
 <style scoped lang="scss">
