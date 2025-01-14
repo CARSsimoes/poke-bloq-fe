@@ -5,6 +5,7 @@ import LayoutType from '@/shared/layouts/layouts'
 import PokemonsSelection from '@/components/pokemons/PokemonsSelection/PokemonsSelection.vue'
 import AppButton from '@/components/app/AppButton/AppButton.vue'
 import useExportCSV from '@/composables/useExportCSV/useExportCSV'
+import AppNoData from '@/components/app/AppNoData/AppNoData.vue'
 
 interface Props {
   activeLayout: LayoutType
@@ -34,7 +35,8 @@ function downloadPokemonCSV() {
       :disabled="pokemonsStore.hasPokemonsCaught"
     />
   </div>
-  <LayoutViewsSwapper :layoutType="activeLayout" />
+  <AppNoData v-if="pokemonsStore.state.pokemonsCaught.length === 0" />
+  <LayoutViewsSwapper v-else :layoutType="activeLayout" />
 
   <PokemonsSelection />
 </template>

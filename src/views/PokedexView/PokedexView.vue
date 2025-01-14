@@ -3,6 +3,7 @@ import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 import { onMounted } from 'vue'
 import LayoutViewsSwapper from '../LayoutViewsSwapper/LayoutViewsSwapper.vue'
 import LayoutType from '@/shared/layouts/layouts'
+import AppLoading from '@/components/app/AppLoading/AppLoading.vue'
 
 interface Props {
   activeLayout: LayoutType
@@ -18,7 +19,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <LayoutViewsSwapper :layoutType="activeLayout" />
+  <AppLoading v-if="pokemonsStore.state.isLoading" />
+  <LayoutViewsSwapper v-else :layoutType="activeLayout" />
 </template>
 
 <style scoped lang="scss">

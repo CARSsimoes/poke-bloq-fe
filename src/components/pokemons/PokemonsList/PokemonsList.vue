@@ -29,7 +29,6 @@ const pokemonsStore = usePokemonsStore()
 
 <style scoped lang="scss">
 @use '@/assets/scss/variables' as vars;
-@use 'sass:map';
 
 .pokemons-list__container {
   padding-inline-start: 0;
