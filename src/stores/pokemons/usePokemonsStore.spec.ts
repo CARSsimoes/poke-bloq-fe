@@ -203,6 +203,7 @@ describe('usePokemonsStore ->', () => {
         expect(pokemonsStore.state.pokemons).toEqual([mockIPokemonDetail1({ caught: false })])
         expect(pokemonsStore.state.totalNumberOfPokemons).toBe(1)
         expect(pokemonsStore.state.isLoading).toBe(false)
+        expect(pokemonsStore.state.isInitialLoading).toBe(false)
       })
 
       it('should load Pokemons with error', async () => {
@@ -215,7 +216,54 @@ describe('usePokemonsStore ->', () => {
         expect(pokemonsStore.state.pokemons).toEqual([])
         expect(pokemonsStore.state.totalNumberOfPokemons).toBe(0)
         expect(pokemonsStore.state.isLoading).toBe(false)
+        expect(pokemonsStore.state.isInitialLoading).toBe(false) // Check that initial loading is disabled after error
         expect(pokemonsStore.state.error).toBe(true)
+      })
+
+      it('should handle no results returned correctly', async () => {
+        const pokemonsStore = usePokemonsStore()
+
+        pokemonsService.getPokemons = vi.fn().mockResolvedValue({
+          data: {
+            count: 0, // No results
+            results: [],
+          },
+        })
+
+        pokemonsService.getPokemonDetails = vi.fn().mockResolvedValue({ data: {} })
+
+        await pokemonsStore.loadPokemons()
+
+        // Expect no pokemons to be loaded
+        expect(pokemonsStore.state.pokemons).toEqual([])
+        expect(pokemonsStore.state.totalNumberOfPokemons).toBe(0)
+        expect(pokemonsStore.state.isLoading).toBe(false)
+        expect(pokemonsStore.state.isInitialLoading).toBe(false)
+      })
+
+      it('should set loading states properly when loading pokemons', async () => {
+        const pokemonsStore = usePokemonsStore()
+
+        // Mock the state to simulate initial loading
+        pokemonsStore.state.isLoading = true
+        pokemonsStore.state.isInitialLoading = true
+
+        pokemonsService.getPokemons = vi.fn().mockResolvedValue({
+          data: {
+            count: 1,
+            results: [{ name: 'pikachu' }],
+          },
+        })
+
+        pokemonsService.getPokemonDetails = vi
+          .fn()
+          .mockImplementation(() => Promise.resolve({ data: mockPokemon1WithStats }))
+
+        await pokemonsStore.loadPokemons()
+
+        // Ensure loading states are set correctly
+        expect(pokemonsStore.state.isLoading).toBe(false)
+        expect(pokemonsStore.state.isInitialLoading).toBe(false)
       })
     })
 

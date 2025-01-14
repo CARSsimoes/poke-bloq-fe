@@ -3,6 +3,7 @@ import type { IPokemonDetail } from '@/shared/types/pokemon'
 import AppBadgeList from '@/components/app/AppBadgeList/AppBadgeList.vue'
 import PokemonId from '@/components/pokemons/PokemonId/PokemonId.vue'
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
+import Routes from '@/shared/types/routes'
 
 interface Props {
   pokemon: IPokemonDetail
@@ -12,6 +13,17 @@ interface Props {
 defineProps<Props>()
 
 const { getTypeListById } = usePokemonsStore()
+
+const shareClicked = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      console.log('Text copied to clipboard:', text)
+    })
+    .catch((err) => {
+      console.error('Failed to copy text: ', err)
+    })
+}
 </script>
 
 <template>
@@ -32,6 +44,13 @@ const { getTypeListById } = usePokemonsStore()
       :caught="pokemon.caught"
       :id="pokemon.id"
     />
+    <button
+      v-if="$route.path === Routes.MY_POKEMONS"
+      class="pokemon-card-button"
+      @click="shareClicked(pokemon.image)"
+    >
+      🔗
+    </button>
     <AppBadgeList :types="getTypeListById(pokemon.id)" />
   </div>
 </template>
@@ -40,6 +59,7 @@ const { getTypeListById } = usePokemonsStore()
 @use '@/assets/scss/variables' as vars;
 
 .pokemon-card {
+  position: relative;
   border: 0.25rem solid vars.$white;
   color: vars.$white;
   display: flex;
@@ -65,5 +85,17 @@ const { getTypeListById } = usePokemonsStore()
 
 .pokemon-card--has-timestamp {
   opacity: 1;
+}
+
+.pokemon-card-button {
+  position: absolute;
+  top: 2rem;
+  right: 1.2rem;
+  border: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  background-color: transparent;
 }
 </style>
