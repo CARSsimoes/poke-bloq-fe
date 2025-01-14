@@ -33,3 +33,16 @@ const { getTypeListById } = usePokemonsStore()
   </td>
   <td v-if="$route.path !== Routes.MY_POKEMONS">{{ pokemonDetail.timestamp }}</td>
 </template>
+
+<style scoped lang="scss">
+@use '@/assets/scss/variables' as vars;
+
+td {
+  border: 0.15rem solid #ddd;
+}
+
+td {
+  padding: 0.75rem;
+  text-align: center;
+}
+</style>

@@ -43,4 +43,8 @@ const removePokemon = () => {
 .pokemon-modal-remove__name {
   text-transform: capitalize;
 }
+
+p {
+  text-align: left;
+}
 </style>

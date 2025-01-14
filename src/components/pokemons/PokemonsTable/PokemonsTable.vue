@@ -6,9 +6,11 @@ import { usePokemonsByRoute } from '@/composables/usePokemonsByRoute/usePokemons
 import { computed } from 'vue'
 import Routes from '@/shared/types/routes'
 import { useRoute } from 'vue-router'
+import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
 
 const { pokemons } = usePokemonsByRoute()
 const route = useRoute()
+const pokemonsStore = usePokemonsStore()
 
 const filteredColumns = computed(() => {
   return route.path !== Routes.MY_POKEMONS
@@ -24,14 +26,18 @@ const filteredColumns = computed(() => {
       <tr
         v-for="pokemon in pokemons"
         :key="pokemon.name"
-        :class="{
-          'pokemons-table--caught': pokemon.caught,
-          'pokemons-table--has-timestamp': Boolean(pokemon.timestamp),
-        }"
-        class="pokemons-table"
-        :style="{
-          backgroundColor: `var(--${pokemon.types[0]?.type.name.toLowerCase()})`,
-        }"
+        :class="[
+          'pokemons-table',
+          `pokemon-${pokemon.types[0]?.type.name.toLowerCase()}`,
+          {
+            'pokemons-table--caught': pokemon.caught,
+            'pokemon-table--selected': pokemonsStore.state.pokemonsSelected.has(pokemon.id),
+            'pokemons-table--has-timestamp': pokemon.timestamp !== '',
+          },
+        ]"
+        @dblclick.stop="
+          route.path === Routes.MY_POKEMONS ? pokemonsStore.selectPokemon(pokemon.id) : null
+        "
       >
         <PokemonsTableRow :pokemonDetail="pokemon" />
       </tr>
@@ -39,7 +45,7 @@ const filteredColumns = computed(() => {
   </table>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use '@/assets/scss/variables' as vars;
 
 table {
@@ -48,20 +54,6 @@ table {
   white-space: nowrap;
   width: 100%;
   border-radius: 2rem;
-}
-
-td {
-  border: 0.15rem solid #ddd;
-}
-
-th,
-td {
-  padding: 0.75rem;
-  text-align: center;
-}
-
-th {
-  background-color: vars.$white;
 }
 
 tbody tr {
@@ -95,5 +87,9 @@ tbody tr {
 
 .pokemons-table--has-timestamp {
   opacity: 1;
+}
+
+.pokemon-table--selected {
+  background-color: vars.$secondary-color;
 }
 </style>

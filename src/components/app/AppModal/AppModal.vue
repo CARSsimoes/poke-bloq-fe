@@ -18,9 +18,7 @@ const closeModal = () => {
       <header class="modal-header">
         <slot name="header"></slot>
       </header>
-      <main class="modal-body">
-        <slot name="body"></slot>
-      </main>
+      <slot name="body"></slot>
       <footer class="modal-footer">
         <slot name="bottom"></slot>
       </footer>

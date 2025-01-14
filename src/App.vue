@@ -81,5 +81,6 @@ nav {
 
 .app__page-title--selected {
   color: vars.$dark;
+  font-weight: bold;
 }
 </style>
