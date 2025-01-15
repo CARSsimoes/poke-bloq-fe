@@ -7,6 +7,7 @@ import AppButton from '@/components/app/AppButton/AppButton.vue'
 import AppNoData from '@/components/app/AppNoData/AppNoData.vue'
 import { ref, watch } from 'vue'
 import PokemonModalDowloadCsv from '@/components/pokemons/PokemonModalDowloadCsv/PokemonModalDowloadCsv.vue'
+import type { IFilters } from '@/shared/types/filters'
 
 interface Props {
   activeLayout: LayoutType
@@ -14,10 +15,9 @@ interface Props {
 
 defineProps<Props>()
 
-const filters = ref({
+const filters = ref<IFilters>({
   name: '',
   minHeight: 0,
-  maxHeight: 9999,
   type: '',
   sortBy: 'name',
 })
@@ -42,7 +42,7 @@ const applyFilters = () => {
 }
 
 const resetFilters = () => {
-  filters.value = { name: '', minHeight: 0, maxHeight: 9999, type: '', sortBy: 'name' }
+  filters.value = { name: '', minHeight: 0, type: '', sortBy: 'name' }
   pokemonsStore.resetPokemonsCaught()
 }
 
@@ -69,6 +69,8 @@ watch(
   <template v-else>
     <div class="my-pokemons__filters">
       <input type="text" v-model="filters.name" placeholder="Search by name" />
+
+      <input type="number" v-model="filters.minHeight" placeholder="Min height" />
 
       <select v-model="filters.sortBy">
         <option value="name">Name</option>
@@ -98,5 +100,12 @@ watch(
 
 .my-pokemons__filters {
   display: flex;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  @media (min-width: 720px) {
+    flex-direction: row;
+  }
 }
 </style>

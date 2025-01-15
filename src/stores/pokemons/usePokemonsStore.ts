@@ -5,6 +5,7 @@ import type { IPokemonDetail, IPokemonTypes } from '@/shared/types/pokemon'
 import type { PokemonDetailsData } from '@/shared/types/api'
 import { LIMIT_NUMBER_OF_POKEMONS } from '@/shared/constants/variables'
 import { formatDateToDMY } from '@/shared/helpers/formatDate'
+import type { IFilters } from '@/shared/types/filters'
 
 interface State {
   pokemons: IPokemonDetail[]
@@ -142,6 +143,8 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       }
     })
 
+    state.pokemonsCaughtOriginal = [...state.pokemonsCaught]
+
     clearPokemonsSelection()
   }
 
@@ -149,6 +152,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
 
   const removePokemon = (id: number): void => {
     state.pokemonsCaught = state.pokemonsCaught.filter((pokemon) => pokemon.id !== id)
+    state.pokemonsCaughtOriginal = [...state.pokemonsCaught]
 
     const pokemon = state.pokemons.find((poke) => poke.id === id)
     if (pokemon) {
@@ -165,15 +169,18 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     state.pokemonsCaught = [...state.pokemonsCaughtOriginal]
   }
 
-  const filterAndSortPokemons = (filters: { name: string; sortBy: string }) => {
+  const filterAndSortPokemons = (filters: IFilters) => {
     state.pokemonsCaught = state.pokemonsCaught
       .filter((pokemon) => {
         const matchesName = pokemon.name.toLowerCase().includes(filters.name.toLowerCase())
-        return matchesName
+        const matchesHeight = pokemon.height >= filters.minHeight
+        return matchesName && matchesHeight
       })
       .sort((a, b) => {
         if (filters.sortBy === 'name') {
           return a.name.localeCompare(b.name)
+        } else if (filters.sortBy === 'height') {
+          return a.height - b.height
         }
         return 0
       })
