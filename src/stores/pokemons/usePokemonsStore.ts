@@ -174,7 +174,11 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       .filter((pokemon) => {
         const matchesName = pokemon.name.toLowerCase().includes(filters.name.toLowerCase())
         const matchesHeight = pokemon.height >= filters.minHeight
-        return matchesName && matchesHeight
+        console.log(filters.type)
+        const matchesType = filters.type
+          ? pokemon.types.some((type) => type.type.name === filters.type)
+          : true
+        return matchesName && matchesHeight && matchesType
       })
       .sort((a, b) => {
         if (filters.sortBy === 'name') {

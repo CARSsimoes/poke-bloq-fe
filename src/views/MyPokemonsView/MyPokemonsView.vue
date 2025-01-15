@@ -8,6 +8,7 @@ import AppNoData from '@/components/app/AppNoData/AppNoData.vue'
 import { ref, watch } from 'vue'
 import PokemonModalDowloadCsv from '@/components/pokemons/PokemonModalDowloadCsv/PokemonModalDowloadCsv.vue'
 import type { IFilters } from '@/shared/types/filters'
+import { pokemonTypes } from '@/shared/types/colors'
 
 interface Props {
   activeLayout: LayoutType
@@ -71,6 +72,11 @@ watch(
       <input type="text" v-model="filters.name" placeholder="Search by name" />
 
       <input type="number" v-model="filters.minHeight" placeholder="Min height" />
+
+      <select v-model="filters.type">
+        <option value="">All Types</option>
+        <option v-for="type in pokemonTypes" :key="type" :value="type">{{ type }}</option>
+      </select>
 
       <select v-model="filters.sortBy">
         <option value="name">Name</option>
