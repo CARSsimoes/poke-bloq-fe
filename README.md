@@ -33,10 +33,10 @@ Web application that allows users to explore a collection of Pokemon.
 - **Lazy Loading**: Pokemon data is lazily loaded to optimize performance and reduce initial loading time.
 - **My Pokemons**: Manage a collection of caught Pokemon.
 - **Filter and Sort**: Filter and sort Pokemon by attributes such as name, height, types, etc.
-- **Click to Catch/Uncatch**: Users can catch or uncatch Pokemon with a simple click.
-- **Double Click to Select**: Double-clicking on a Pokemon will select it for further interaction.
+- **Click to Catch/Uncatch**: Users can catch or uncatch Pokemon with a simple click (pokeball image)
+- **Double Click to Select**: Double-clicking on a Pokemon will select it for further interaction
 - **Download CSV**: Users can download their caught Pokemon data in CSV format for further use (all pokemons caught).
-- **Clipboard Share**: Users can share Pokemon information via the clipboard.
+- **Clipboard Share**: Users can share Pokemon information via the clipboard using 🔗 (only available at My Pokemons view)
 - **Responsive Design**: App allow select between card or table layout
 
 ## Interaction with the User
