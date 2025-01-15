@@ -1,6 +1,12 @@
-## node version
+## Development Setup
 
-Please has installed a node version of 20.18.0 or higher
+To run this app locally for development, follow these steps:
+
+### Prerequisites
+
+Ensure that you have the following installed on your machine:
+
+- **Node.js** (version 18 or later)
 
 ## install dependencies
 
@@ -17,20 +23,41 @@ For mobile testing purposes use the Network: url provided
 
 ```
 
-### Type-Check, Compile and Minify for Production
+## Overview
 
-```sh
-npm run build
-```
+Web application that allows users to explore a collection of Pokemon.
 
-### run unit rests
+### Key Features:
 
-```sh
-npm run test:unit
-```
+- **Pokedex**: View a list of all available Pokemon
+- **Lazy Loading**: Pokemon data is lazily loaded to optimize performance and reduce initial loading time.
+- **My Pokemons**: Manage a collection of caught Pokemon.
+- **Filter and Sort**: Filter and sort Pokemon by attributes such as name, height, types, etc.
+- **Click to Catch/Uncatch**: Users can catch or uncatch Pokemon with a simple click.
+- **Double Click to Select**: Double-clicking on a Pokemon will select it for further interaction.
+- **Download CSV**: Users can download their caught Pokemon data in CSV format for further use (all pokemons caught).
+- **Clipboard Share**: Users can share Pokemon information via the clipboard.
+- **Responsive Design**: App allow select between card or table layout
 
-### run lint
+## Interaction with the User
 
-```sh
-npm run lint
-```
+### Views
+
+1. **Pokédex View** (`/`):
+
+   - Displays all available Pokemon.
+   - Pokemon are lazily loaded to improve performance.
+   - Users can see when pokemon was first caught.
+
+2. **My Pokemon View** (`/my-pokemons`):
+
+   - Shows a collection of Pokemon that the user has caught.
+   - Users can see details about their caught Pokemon.
+   - Users can filter Pokemon by name, type, and other attributes.
+
+3. **Layouts**:
+   - The app allows users to switch between **List** and **Table** views for better interaction and visualization.
+
+## Stack
+
+Vue 3, Pinia, Vue Router, Vitest, Sass and Axios

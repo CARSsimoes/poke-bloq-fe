@@ -37,11 +37,11 @@ describe('usePokemonsStore ->', () => {
     })
 
     describe('selectedSize ->', () => {
-      it('should return 0 when no Pokémon are selected', () => {
+      it('should return 0 when no Pokemon are selected', () => {
         expect(store.selectedSize).toBe(0)
       })
 
-      it('should return the correct size when Pokémon are selected', () => {
+      it('should return the correct size when Pokemon are selected', () => {
         store.state.pokemonsSelected.add(1)
         store.state.pokemonsSelected.add(2)
         expect(store.selectedSize).toBe(2)
@@ -49,11 +49,11 @@ describe('usePokemonsStore ->', () => {
     })
 
     describe('hasPokemonsSelected ->', () => {
-      it('should return false when no Pokémon are selected', () => {
+      it('should return false when no Pokemon are selected', () => {
         expect(store.hasPokemonsSelected).toBe(false)
       })
 
-      it('should return true when Pokémon are selected', () => {
+      it('should return true when Pokemon are selected', () => {
         store.state.pokemonsSelected.add(1)
         expect(store.hasPokemonsSelected).toBe(true)
       })
@@ -254,12 +254,12 @@ describe('usePokemonsStore ->', () => {
     })
 
     describe('selectPokemon ->', () => {
-      it('should add a Pokémon ID to the selection if not already selected', () => {
+      it('should add a Pokemon ID to the selection if not already selected', () => {
         store.selectPokemon(1)
         expect(store.state.pokemonsSelected.has(1)).toBe(true)
       })
 
-      it('should remove a Pokémon ID from the selection if already selected', () => {
+      it('should remove a Pokemon ID from the selection if already selected', () => {
         store.state.pokemonsSelected.add(1)
         store.selectPokemon(1)
         expect(store.state.pokemonsSelected.has(1)).toBe(false)
@@ -267,7 +267,7 @@ describe('usePokemonsStore ->', () => {
     })
 
     describe('clearPokemonsSelection ->', () => {
-      it('should clear the selected Pokémon set', () => {
+      it('should clear the selected Pokemon set', () => {
         store.state.pokemonsSelected.add(1)
         store.state.pokemonsSelected.add(2)
         expect(store.selectedSize).toBe(2)
@@ -278,7 +278,7 @@ describe('usePokemonsStore ->', () => {
     })
 
     describe('searchPokemonNameById ->', () => {
-      it('should return the correct Pokémon name when the ID exists', () => {
+      it('should return the correct Pokemon name when the ID exists', () => {
         store.state.pokemonsCaught = [mockIPokemonDetail2]
         const result1 = store.searchPokemonNameById(1)
         expect(result1).toBe('bulbasaur')
@@ -295,7 +295,7 @@ describe('usePokemonsStore ->', () => {
     })
 
     describe('removePokemon ->', () => {
-      it('should remove the Pokémon with the given ID from the pokemonsCaught array', () => {
+      it('should remove the Pokemon with the given ID from the pokemonsCaught array', () => {
         store.state.pokemonsCaught = [mockIPokemonDetail2]
 
         store.state.pokemons = [mockIPokemonDetail2]
@@ -318,7 +318,7 @@ describe('usePokemonsStore ->', () => {
     })
 
     describe('removeAllPokemonsSelected ->', () => {
-      it('should remove Pokémon in the selected set from the pokemonsCaught array', () => {
+      it('should remove Pokemon in the selected set from the pokemonsCaught array', () => {
         store.state.pokemonsCaught = [mockIPokemonDetail2]
 
         store.state.pokemons = [mockIPokemonDetail2]
@@ -330,7 +330,7 @@ describe('usePokemonsStore ->', () => {
         expect(store.state.pokemonsCaught).toEqual([])
       })
 
-      it('should clear the pokemonsSelected set after removing Pokémon', () => {
+      it('should clear the pokemonsSelected set after removing Pokemon', () => {
         store.state.pokemonsCaught = [mockIPokemonDetail2]
 
         store.state.pokemons = [mockIPokemonDetail2]

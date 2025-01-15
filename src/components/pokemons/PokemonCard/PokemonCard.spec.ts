@@ -50,13 +50,13 @@ describe('PokemonCard.vue', () => {
     setActivePinia(pinia)
   })
 
-  it('renders Pokémon name correctly', () => {
+  it('renders Pokemon name correctly', () => {
     const wrapper = createWrapper()
     const pokemonName = wrapper.find('.pokemon-id__title')
     expect(pokemonName.text()).toBe('Bulbasaur')
   })
 
-  it('renders Pokémon image correctly', () => {
+  it('renders Pokemon image correctly', () => {
     const wrapper = createWrapper()
     const pokemonImage = wrapper.find('.pokemon-id__img')
     expect(pokemonImage.attributes('src')).toBe('bulbasaur.png')

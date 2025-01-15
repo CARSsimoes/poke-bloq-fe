@@ -58,7 +58,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       return mapPokemonDetails(details)
     } catch (e) {
       // use monitoring tools like Posthog or Sentry
-      console.log('Failed to fetch Pokémon:', e)
+      console.log('Failed to fetch Pokemon:', e)
       return {} as IPokemonDetail
     }
   }
@@ -86,7 +86,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     } catch (e) {
       state.error = true
       // use monitoring tools like Posthog or Sentry
-      console.log('Failed to load Pokémons:', e)
+      console.log('Failed to load Pokemons:', e)
     } finally {
       state.isLoading = false
       state.isInitialLoading = false
@@ -185,6 +185,10 @@ export const usePokemonsStore = defineStore('pokemons', () => {
           return a.name.localeCompare(b.name)
         } else if (filters.sortBy === 'height') {
           return a.height - b.height
+        } else if (filters.sortBy === 'timestamp') {
+          const dateA = new Date(a.timestamp)
+          const dateB = new Date(b.timestamp)
+          return dateA.getMilliseconds() - dateB.getMilliseconds()
         }
         return 0
       })

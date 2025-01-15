@@ -10,7 +10,7 @@ beforeEach(() => {
 })
 
 describe('PokemonId.vue', () => {
-  it('renders the Pokémon name correctly', () => {
+  it('renders the Pokemon name correctly', () => {
     const wrapper = mount(PokemonId, {
       props: {
         name: 'Bulbasaur',
