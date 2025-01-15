@@ -12,7 +12,6 @@ describe('AppToggle.vue', () => {
       },
     })
 
-    // Check if both options are displayed
     expect(wrapper.text()).toContain('Option 1')
     expect(wrapper.text()).toContain('Option 2')
   })
@@ -27,10 +26,8 @@ describe('AppToggle.vue', () => {
       },
     })
 
-    // Simulate a click on the checkbox
     await wrapper.find('input[type="checkbox"]').trigger('click')
 
-    // Check if the toggleMethod was called
     expect(toggleMethodMock).toHaveBeenCalled()
   })
 })

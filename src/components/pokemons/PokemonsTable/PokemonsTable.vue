@@ -45,7 +45,7 @@ const filteredColumns = computed(() => {
   </table>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use '@/assets/scss/variables' as vars;
 
 table {
@@ -69,14 +69,6 @@ tbody tr {
 
   tbody tr {
     display: table-row;
-  }
-
-  td:first-child,
-  th:first-child {
-    position: sticky;
-    left: 0;
-    background-color: vars.$primary-color;
-    z-index: 1;
   }
 }
 

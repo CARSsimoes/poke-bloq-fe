@@ -4,8 +4,9 @@ import LayoutViewsSwapper from '../LayoutViewsSwapper/LayoutViewsSwapper.vue'
 import LayoutType from '@/shared/layouts/layouts'
 import PokemonsSelection from '@/components/pokemons/PokemonsSelection/PokemonsSelection.vue'
 import AppButton from '@/components/app/AppButton/AppButton.vue'
-import useExportCSV from '@/composables/useExportCSV/useExportCSV'
 import AppNoData from '@/components/app/AppNoData/AppNoData.vue'
+import { ref } from 'vue'
+import PokemonModalDowloadCsv from '@/components/pokemons/PokemonModalDowloadCsv/PokemonModalDowloadCsv.vue'
 
 interface Props {
   activeLayout: LayoutType
@@ -14,10 +15,14 @@ interface Props {
 defineProps<Props>()
 
 const pokemonsStore = usePokemonsStore()
-const { downloadCSV } = useExportCSV()
+const showModal = ref<boolean>(false)
 
-function downloadPokemonCSV() {
-  downloadCSV(pokemonsStore.state.pokemonsCaught, 'pokemons.csv')
+const openModal = () => {
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
 }
 </script>
 
@@ -29,16 +34,17 @@ function downloadPokemonCSV() {
         `${pokemonsStore.totalNumberOfPokemonsCaught} / ${pokemonsStore.state.totalNumberOfPokemons}`
       }}
     </p>
-    <AppButton
-      text="Download"
-      :action="downloadPokemonCSV"
-      :disabled="pokemonsStore.hasPokemonsCaught"
-    />
+    <AppButton text="Download" :action="openModal" :disabled="pokemonsStore.hasPokemonsCaught" />
   </div>
   <AppNoData v-if="pokemonsStore.state.pokemonsCaught.length === 0" />
   <LayoutViewsSwapper v-else :layoutType="activeLayout" />
-
   <PokemonsSelection />
+  <PokemonModalDowloadCsv
+    v-if="showModal"
+    :isVisible="showModal"
+    :close-modal="closeModal"
+    :number-of-pokemons="pokemonsStore.totalNumberOfPokemonsCaught"
+  />
 </template>
 
 <style scoped lang="scss">
