@@ -5,7 +5,7 @@ const pokemonsStore = usePokemonsStore()
 </script>
 
 <template>
-  <div v-if="pokemonsStore.hasPokemonsSelected" class="pokemons-selection">
+  <div class="pokemons-selection">
     <p>{{ pokemonsStore.selectedSize }} pokemon(s) will return to the wild 😞</p>
     <div class="pokemons-selection__buttons-container">
       <button @click="pokemonsStore.clearPokemonsSelection()">Cancel</button>

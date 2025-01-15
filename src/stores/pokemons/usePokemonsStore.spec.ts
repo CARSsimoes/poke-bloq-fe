@@ -36,22 +36,6 @@ describe('usePokemonsStore ->', () => {
       store = usePokemonsStore()
     })
 
-    it('should return the correct total number of caught pokemons', () => {
-      expect(store.hasPokemonsCaught).toBe(true)
-
-      expect(store.totalNumberOfPokemonsCaught).toBe(0)
-
-      store.state.pokemonsCaught.push(mockIPokemonDetail1({ caught: true }))
-
-      expect(store.totalNumberOfPokemonsCaught).toBe(1)
-
-      store.state.pokemonsCaught.push(mockIPokemonDetail2)
-
-      expect(store.totalNumberOfPokemonsCaught).toBe(2)
-
-      expect(store.hasPokemonsCaught).toBe(false)
-    })
-
     describe('selectedSize ->', () => {
       it('should return 0 when no Pokémon are selected', () => {
         expect(store.selectedSize).toBe(0)
@@ -154,6 +138,9 @@ describe('usePokemonsStore ->', () => {
 
         expect(mockPokemon.caught).toBe(true)
         expect(mockPokemon.timestamp).toBe('12/01/2025')
+
+        expect(store.totalNumberOfPokemonsCaught).toBe(1)
+        expect(store.noPokemonsCaught).toBe(false)
       })
 
       it('should release a Pokemon and remove it from the caught list', () => {
@@ -167,6 +154,8 @@ describe('usePokemonsStore ->', () => {
 
         expect(mockPokemon.caught).toBe(false)
         expect(pokemonsStore.state.pokemonsCaught).not.toContain(mockPokemon)
+        expect(store.totalNumberOfPokemonsCaught).toBe(0)
+        expect(store.noPokemonsCaught).toBe(true)
       })
 
       it('should not overwrite timestamp if it is already set', () => {

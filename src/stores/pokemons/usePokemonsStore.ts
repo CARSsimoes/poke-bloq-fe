@@ -13,6 +13,7 @@ interface State {
   error: boolean
   totalNumberOfPokemons: number
   pokemonsCaught: IPokemonDetail[]
+  pokemonsCaughtOriginal: IPokemonDetail[]
   pokemonsSelected: Set<number>
 }
 export const usePokemonsStore = defineStore('pokemons', () => {
@@ -23,12 +24,13 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     error: false,
     totalNumberOfPokemons: 0,
     pokemonsCaught: [],
+    pokemonsCaughtOriginal: [],
     pokemonsSelected: new Set(),
   })
 
-  const hasPokemonsCaught = computed(() => state.pokemonsCaught.length === 0)
+  const noPokemonsCaught = computed(() => state.pokemonsCaughtOriginal.length === 0)
 
-  const totalNumberOfPokemonsCaught = computed(() => state.pokemonsCaught.length)
+  const totalNumberOfPokemonsCaught = computed(() => state.pokemonsCaughtOriginal.length)
 
   const mapPokemonDetails = (details: PokemonDetailsData): IPokemonDetail => {
     return {
@@ -100,10 +102,14 @@ export const usePokemonsStore = defineStore('pokemons', () => {
         state.pokemonsCaught.push(pokemon)
 
         if (!pokemon.timestamp) pokemon.timestamp = formatDateToDMY()
+
+        state.pokemonsCaughtOriginal = [...state.pokemonsCaught]
       } else {
         state.pokemonsCaught = state.pokemonsCaught.filter(
           (caughtPokemon) => caughtPokemon.id !== pokemon.id,
         )
+
+        state.pokemonsCaughtOriginal = [...state.pokemonsCaught]
       }
     }
   }
@@ -155,12 +161,30 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     return pokemon?.name
   }
 
+  const resetPokemonsCaught = () => {
+    state.pokemonsCaught = [...state.pokemonsCaughtOriginal]
+  }
+
+  const filterAndSortPokemons = (filters: { name: string; sortBy: string }) => {
+    state.pokemonsCaught = state.pokemonsCaught
+      .filter((pokemon) => {
+        const matchesName = pokemon.name.toLowerCase().includes(filters.name.toLowerCase())
+        return matchesName
+      })
+      .sort((a, b) => {
+        if (filters.sortBy === 'name') {
+          return a.name.localeCompare(b.name)
+        }
+        return 0
+      })
+  }
+
   return {
     state,
     loadPokemons,
     catchPokemonById,
     getTypeListById,
-    hasPokemonsCaught,
+    noPokemonsCaught,
     totalNumberOfPokemonsCaught,
     mapPokemonDetails,
     fetchPokemonDetails,
@@ -171,5 +195,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     hasPokemonsSelected,
     removePokemon,
     searchPokemonNameById,
+    filterAndSortPokemons,
+    resetPokemonsCaught,
   }
 })
