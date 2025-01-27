@@ -16,6 +16,7 @@ const { getTypeListById } = usePokemonsStore()
 
 <template>
   <div
+    v-if="pokemon"
     class="pokemon-card"
     :class="{
       'pokemon-card--caught': pokemon.caught,
@@ -34,14 +35,13 @@ const { getTypeListById } = usePokemonsStore()
     />
     <AppBadgeList :types="getTypeListById(pokemon.id)" />
   </div>
+  <div v-else>Pokemon Not found</div>
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 .pokemon-card {
-  border: 0.25rem solid vars.$white;
-  color: vars.$white;
+  border: 0.25rem solid $white;
+  color: $white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,11 +56,11 @@ const { getTypeListById } = usePokemonsStore()
 
 .pokemon-card--caught {
   opacity: 1;
-  color: vars.$black;
+  color: $black;
 }
 
 .pokemon-card--selected {
-  border: 0.25rem solid vars.$primary-color;
+  border: 0.25rem solid $primary-color;
 }
 
 .pokemon-card--has-timestamp {

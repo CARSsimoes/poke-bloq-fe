@@ -16,8 +16,6 @@ defineProps<Props>()
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 .app-badge-list__container {
   display: flex;
   flex-wrap: wrap;
@@ -27,6 +25,6 @@ defineProps<Props>()
   padding: 0.5rem;
   border-radius: 1rem;
   height: 1.5rem;
-  background-color: vars.$white;
+  background-color: $white;
 }
 </style>

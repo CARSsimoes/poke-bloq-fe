@@ -28,8 +28,6 @@ const pokemonsStore = usePokemonsStore()
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 .pokemons-list__container {
   padding-inline-start: 0;
   display: flex;

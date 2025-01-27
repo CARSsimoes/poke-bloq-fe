@@ -40,8 +40,6 @@ const { getTypeListById } = usePokemonsStore()
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 td {
   border: 0.15rem solid #ddd;
 }

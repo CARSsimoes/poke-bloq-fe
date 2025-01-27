@@ -15,17 +15,15 @@ const pokemonsStore = usePokemonsStore()
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 .pokemons-selection {
   position: fixed;
   bottom: 1.25rem;
   left: 50%;
   transform: translateX(-50%);
-  background-color: vars.$white;
+  background-color: $white;
   padding: 0.625rem 1.25rem;
-  border: 0.0625rem solid vars.$gray;
-  box-shadow: 0 0.25rem 0.5rem vars.$box-shadow;
+  border: 0.0625rem solid $gray;
+  box-shadow: 0 0.25rem 0.5rem $box-shadow;
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -34,8 +32,8 @@ const pokemonsStore = usePokemonsStore()
 
 .pokemons-selection button {
   padding: 0.3125rem 0.625rem;
-  background-color: vars.$secondary-color;
-  color: vars.$white;
+  background-color: $secondary-color;
+  color: $white;
   border: none;
   cursor: pointer;
 }

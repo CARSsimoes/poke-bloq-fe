@@ -11,13 +11,12 @@ defineProps<Props>()
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 button {
   padding: 0.25rem 0.5rem;
-  background-color: vars.$secondary-color;
+  background-color: $secondary-color;
   border-radius: 0.25rem;
   cursor: pointer;
+  color: $black;
   font-size: 1rem;
 }
 </style>

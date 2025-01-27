@@ -69,20 +69,33 @@ watch(
   <AppNoData v-if="pokemonsStore.state.pokemonsCaughtOriginal.length === 0" />
   <template v-else>
     <div class="my-pokemons__filters">
-      <input type="text" v-model="filters.name" placeholder="Search by name" />
+      <div class="my-pokemons__filters__sub-section">
+        <span>Search by name:</span>
+        <input type="text" v-model="filters.name" placeholder="Pokemon name" />
+      </div>
 
-      <input type="number" v-model="filters.minHeight" placeholder="Min height" />
+      <div class="my-pokemons__filters__sub-section">
+        <span>Sort by Minimum height:</span>
+        <input type="number" v-model="filters.minHeight" placeholder="Min height" />
+      </div>
 
-      <select v-model="filters.type">
-        <option value="">All Types</option>
-        <option v-for="type in pokemonTypes" :key="type" :value="type">{{ type }}</option>
-      </select>
+      <div class="my-pokemons__filters__sub-section">
+        <span>Sort list by Type:</span>
 
-      <select v-model="filters.sortBy">
-        <option value="name">Name</option>
-        <option value="height">Height</option>
-        <option value="timestamp">Timestamp</option>
-      </select>
+        <select v-model="filters.type">
+          <option value="">All Types</option>
+          <option v-for="type in pokemonTypes" :key="type" :value="type">{{ type }}</option>
+        </select>
+      </div>
+
+      <div class="my-pokemons__filters__sub-section">
+        <span>Sort list by</span>
+        <select v-model="filters.sortBy">
+          <option value="name">Name</option>
+          <option value="height">Height</option>
+          <option value="timestamp">Timestamp</option>
+        </select>
+      </div>
 
       <AppButton text="Reset" :action="resetFilters" />
     </div>
@@ -112,6 +125,12 @@ watch(
   gap: 1rem;
   @media (min-width: 720px) {
     flex-direction: row;
+    align-items: end;
   }
+}
+
+.my-pokemons__filters__sub-section {
+  display: flex;
+  flex-direction: column;
 }
 </style>

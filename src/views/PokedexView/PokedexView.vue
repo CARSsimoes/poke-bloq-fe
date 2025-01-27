@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePokemonsStore } from '@/stores/pokemons/usePokemonsStore'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import LayoutViewsSwapper from '../LayoutViewsSwapper/LayoutViewsSwapper.vue'
 import LayoutType from '@/shared/layouts/layouts'
 import AppLoading from '@/components/app/AppLoading/AppLoading.vue'
@@ -19,8 +19,12 @@ const fetchPokemons = () => {
   pokemonsStore.loadPokemons()
 }
 
+const finalPokemonFetched = computed(
+  () => pokemonsStore.state.pokemons?.length === pokemonsStore.state.totalNumberOfPokemons,
+)
+
 onMounted(() => {
-  if (pokemonsStore.state.pokemons.length === 0) fetchPokemons()
+  if (pokemonsStore.state.pokemons?.length === 0) fetchPokemons()
 })
 </script>
 
@@ -38,7 +42,7 @@ onMounted(() => {
   <LayoutViewsSwapper v-else :layoutType="activeLayout" />
 
   <!-- load More button for subsequent loading -->
-  <div class="pokedex-view__bottom-section">
+  <div class="pokedex-view__bottom-section" v-if="!finalPokemonFetched">
     <AppButton
       v-if="!pokemonsStore.state.isLoading"
       class="pokedex-view__load-more-button"
@@ -51,8 +55,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 header {
   display: flex;
   justify-content: space-between;
@@ -64,7 +66,7 @@ header {
 }
 
 .pokedex-view__title {
-  color: vars.$white;
+  color: $white;
   font-size: 2rem;
 }
 

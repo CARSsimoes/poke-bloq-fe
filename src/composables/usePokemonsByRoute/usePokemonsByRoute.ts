@@ -8,7 +8,7 @@ export const usePokemonsByRoute = () => {
   const route = useRoute()
   const pokemonsStore = usePokemonsStore()
 
-  const pokemons: ComputedRef<IPokemonDetail[]> = computed(() => {
+  const pokemons: ComputedRef<IPokemonDetail[] | null> = computed(() => {
     if (route.path === Routes.HOME) {
       return pokemonsStore.state.pokemons
     }

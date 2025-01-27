@@ -6,9 +6,10 @@ import type { PokemonDetailsData } from '@/shared/types/api'
 import { LIMIT_NUMBER_OF_POKEMONS } from '@/shared/constants/variables'
 import { formatDateToDMY } from '@/shared/helpers/formatDate'
 import type { IFilters } from '@/shared/types/filters'
+import axios from 'axios'
 
 interface State {
-  pokemons: IPokemonDetail[]
+  pokemons: IPokemonDetail[] | null
   isInitialLoading: boolean
   isLoading: boolean
   error: boolean
@@ -29,7 +30,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     pokemonsSelected: new Set(),
   })
 
-  const noPokemonsCaught = computed(() => state.pokemonsCaughtOriginal.length === 0)
+  const noPokemonsCaught = computed(() => state.pokemonsCaught.length === 0)
 
   const totalNumberOfPokemonsCaught = computed(() => state.pokemonsCaughtOriginal.length)
 
@@ -52,23 +53,27 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     }
   }
 
-  const fetchPokemonDetails = async (pokemonName: string): Promise<IPokemonDetail> => {
+  const fetchPokemonDetails = async (pokemonName: string): Promise<IPokemonDetail | null> => {
     try {
       const { data: details } = await pokemonsService.getPokemonDetails(pokemonName)
       return mapPokemonDetails(details)
     } catch (e) {
       // use monitoring tools like Posthog or Sentry
-      console.log('Failed to fetch Pokemon:', e)
-      return {} as IPokemonDetail
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.warn(`Pokemon ${pokemonName} not found, skipping...`)
+      } else {
+        console.error(`Failed to fetch Pokemon ${pokemonName}:`, e)
+      }
+      return null
     }
   }
 
   const loadPokemons = async (
     limit = LIMIT_NUMBER_OF_POKEMONS,
-    offset = state.pokemons.length,
+    offset = state.pokemons?.length || 0,
   ): Promise<void> => {
     try {
-      if (state.pokemons.length === 0) {
+      if (state.pokemons?.length === 0) {
         state.isInitialLoading = true
       }
       state.isLoading = true
@@ -78,15 +83,19 @@ export const usePokemonsStore = defineStore('pokemons', () => {
 
       const { data } = await pokemonsService.getPokemons(limit, offset)
       state.totalNumberOfPokemons = data.count
-      const pokes = await Promise.all(data.results.map((poke) => fetchPokemonDetails(poke.name)))
 
-      state.pokemons = [...state.pokemons, ...pokes]
+      const pokemonDetails = await Promise.all(
+        data.results.map((poke) => fetchPokemonDetails(poke.name)),
+      )
+
+      const validPokemons = pokemonDetails.filter((p): p is IPokemonDetail => p !== null)
+      state.pokemons = [...(state.pokemons ?? []), ...validPokemons]
 
       container.scrollTop = previousScrollPosition
     } catch (e) {
       state.error = true
       // use monitoring tools like Posthog or Sentry
-      console.log('Failed to load Pokemons:', e)
+      console.error('Failed to load Pokemons:', e)
     } finally {
       state.isLoading = false
       state.isInitialLoading = false
@@ -94,7 +103,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
   }
 
   const catchPokemonById = (id: number) => {
-    const pokemon = state.pokemons.find((poke) => poke.id === id)
+    const pokemon = state.pokemons?.find((poke) => poke.id === id)
 
     if (pokemon) {
       pokemon.caught = !pokemon.caught
@@ -116,7 +125,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
   }
 
   const getTypeListById = (id: number): IPokemonTypes[] => {
-    const pokemon = state.pokemons.find((poke) => poke.id === id)
+    const pokemon = state.pokemons?.find((poke) => poke.id === id)
     return pokemon ? pokemon.types : []
   }
 
@@ -137,7 +146,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       (pokemon) => !state.pokemonsSelected.has(pokemon.id),
     )
 
-    state.pokemons.forEach((pokemon) => {
+    state.pokemons?.forEach((pokemon) => {
       if (state.pokemonsSelected.has(pokemon.id)) {
         pokemon.caught = false
       }
@@ -154,7 +163,7 @@ export const usePokemonsStore = defineStore('pokemons', () => {
     state.pokemonsCaught = state.pokemonsCaught.filter((pokemon) => pokemon.id !== id)
     state.pokemonsCaughtOriginal = [...state.pokemonsCaught]
 
-    const pokemon = state.pokemons.find((poke) => poke.id === id)
+    const pokemon = state.pokemons?.find((poke) => poke.id === id)
     if (pokemon) {
       pokemon.caught = false
     }
@@ -174,7 +183,6 @@ export const usePokemonsStore = defineStore('pokemons', () => {
       .filter((pokemon) => {
         const matchesName = pokemon.name.toLowerCase().includes(filters.name.toLowerCase())
         const matchesHeight = pokemon.height >= filters.minHeight
-        console.log(filters.type)
         const matchesType = filters.type
           ? pokemon.types.some((type) => type.type.name === filters.type)
           : true

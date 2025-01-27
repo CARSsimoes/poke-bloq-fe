@@ -45,15 +45,13 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: vars.$box-shadow;
+  background: $box-shadow;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,10 +59,10 @@ onUnmounted(() => {
 }
 
 .modal-content {
-  background: vars.$white;
+  background: $white;
   padding: 1.5rem;
   border-radius: 1.25rem;
-  box-shadow: 0 0.25rem 0.5rem vars.$box-shadow;
+  box-shadow: 0 0.25rem 0.5rem $box-shadow;
   position: relative;
   max-width: 30rem;
   width: 80%;

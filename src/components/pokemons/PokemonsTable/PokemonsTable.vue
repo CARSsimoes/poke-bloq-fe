@@ -46,8 +46,6 @@ const filteredColumns = computed(() => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 table {
   display: table;
   overflow-x: auto;
@@ -74,7 +72,7 @@ tbody tr {
 
 .pokemons-table--caught {
   opacity: 1;
-  color: vars.$black;
+  color: $black;
 }
 
 .pokemons-table--has-timestamp {
@@ -82,6 +80,6 @@ tbody tr {
 }
 
 .pokemon-table--selected {
-  background-color: vars.$secondary-color;
+  background-color: $secondary-color;
 }
 </style>

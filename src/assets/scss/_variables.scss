@@ -5,3 +5,12 @@ $black: #212121;
 $gray: #cccccc;
 $dark: #37474f;
 $box-shadow: rgba(0, 0, 0, 0.2);
+
+:root {
+  --primary-color: #{$primary-color};
+  --secondary-color: #{$secondary-color};
+  --white: #{$white};
+  --black: #{$black};
+  --dark: #{$dark};
+  --box-shadow: #{$box-shadow};
+}

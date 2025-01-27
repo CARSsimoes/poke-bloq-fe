@@ -10,8 +10,6 @@ const message = 'Loading, please wait...'
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 .app-loading {
   display: flex;
   flex-direction: column;
@@ -32,7 +30,7 @@ const message = 'Loading, please wait...'
 .app-loading__message {
   margin-top: 1rem;
   font-size: 1.2rem;
-  color: vars.$dark;
+  color: $dark;
 }
 
 @keyframes spin {

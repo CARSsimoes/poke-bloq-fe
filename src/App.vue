@@ -56,8 +56,6 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 .app__nav-container {
   display: flex;
   justify-content: space-between;
@@ -74,7 +72,7 @@ nav {
   gap: 2rem;
   font-size: 2rem;
   a {
-    color: vars.$white;
+    color: var($white);
     text-decoration: none;
   }
 }
@@ -84,7 +82,7 @@ nav {
 }
 
 .app__page-title--selected {
-  color: vars.$dark;
+  color: $dark;
   font-weight: bold;
 }
 </style>

@@ -24,15 +24,13 @@ const handleToggle = () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 .app-toggle-container {
   position: relative;
   width: 100%;
   min-width: 8rem;
   height: 2.5rem;
   margin-top: 0.5rem;
-  border: 0.0625rem solid vars.$dark;
+  border: 0.0625rem solid $dark;
   border-radius: 1.25rem;
 }
 
@@ -47,23 +45,23 @@ const handleToggle = () => {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: vars.$primary-color;
+  background: $primary-color;
   border-radius: 1.25rem;
 }
 
 .app-toggle-container input[type='checkbox']:checked + .app-toggle_back {
-  background: vars.$primary-color;
+  background: $primary-color;
 }
 
 .app-toggle-container input[type='checkbox'] + .app-toggle_back .app-toggle__empty {
   display: block;
   position: absolute;
   content: ' ';
-  background: vars.$white;
+  background: $white;
   width: 50%;
   height: 100%;
   transition: margin 150ms linear;
-  border: 0.0625rem solid vars.$dark;
+  border: 0.0625rem solid $dark;
   border-radius: 1.25rem;
 }
 
@@ -75,7 +73,7 @@ const handleToggle = () => {
   display: block;
   position: absolute;
   width: 50%;
-  color: vars.$white;
+  color: $white;
   line-height: 2.5rem;
   text-align: center;
   font-size: 1.25rem;
@@ -94,20 +92,20 @@ const handleToggle = () => {
   input[type='checkbox']:checked
   + .app-toggle_back
   .app-toggle-label.app-toggle-label__first-option {
-  color: vars.$white;
+  color: $white;
 }
 
 .app-toggle-container
   input[type='checkbox']
   + .app-toggle_back
   .app-toggle-label.app-toggle-label__second-option {
-  color: vars.$white;
+  color: $white;
 }
 
 .app-toggle-container
   input[type='checkbox']:checked
   + .app-toggle_back
   .app-toggle-label.app-toggle-label__second-option {
-  color: vars.$white;
+  color: $white;
 }
 </style>

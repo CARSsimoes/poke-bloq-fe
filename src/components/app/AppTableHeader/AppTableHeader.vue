@@ -15,14 +15,12 @@ defineProps<Props>()
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/variables' as vars;
-
 th {
   padding: 0.75rem;
   text-align: center;
 }
 
 th {
-  background-color: vars.$white;
+  background-color: $white;
 }
 </style>
