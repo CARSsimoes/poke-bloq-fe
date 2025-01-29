@@ -38,6 +38,7 @@ Web application that allows users to explore a collection of Pokemon.
 - **Download CSV**: Users can download their caught Pokemon data in CSV format for further use (all pokemons caught).
 - **Clipboard Share**: Users can share Pokemon information via the clipboard using 🔗 (only available at MyPokemons view)
 - **Responsive Design**: App allow select between card or table layout
+- **Persisted State**: State is persisted between page refreshes
 
 ## Interaction with the User
 
